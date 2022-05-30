@@ -2,14 +2,17 @@ NAME =		ft_malloc
 
 CC =		gcc
 
-
 INC_DIR =	inc
 
 INC_FILE =	ft_malloc.h
 		
 SRC_DIR =	src
 
-SRC_FILE =	main.c
+SRC_FILE =	main.c \
+			ft_malloc.c \
+			zone.c \
+			debug.c \
+			
 
 CFLAGS =	-I $(INC_DIR) -I libft/inc/ -Wall -g -lm -Werror -Wextra
 
