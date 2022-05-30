@@ -17,8 +17,8 @@ typedef struct	s_zones
 typedef struct	s_block {
 	// size_t		size_prev;
 	size_t		size;
-	struct	s_block	*next;
 	struct	s_block	*prev;
+	struct	s_block	*next;
 	char		free;
 }				t_block;
 

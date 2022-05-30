@@ -2,6 +2,20 @@
 
 Reproduction de la celebre fonction malloc
 
+## Schema Zone
+```
++-----------------------------+---------+
+| Metadata                    | Data    +
++------+------+------+--------+---------+
+| size | prev | next | isfree |         |
++------+------+------+--------+---------+
+```
+```
++--------------+---------+--------------+---------+
+| Metadata     | Data    | Metadata     | Data    +
++--------------+---------+--------------+---------+
+```
+
 ## Links
 - [Subject](https://cdn.intra.42.fr/pdf/pdf/48936/fr.subject.pdf)
 - [Malloc Tutorial](https://wiki-prog.infoprepa.epita.fr/images/0/04/Malloc_tutorial.pdf)
