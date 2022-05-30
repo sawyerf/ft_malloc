@@ -9,13 +9,13 @@
 
 typedef struct	s_zones
 {
-	void		*zone_tiny;
-	void		*zone_small;
-	void		*zone_large;
+	void		*tiny;
+	void		*medium;
+	void		*large;
 }				t_zones;
 
 typedef struct	s_block {
-	size_t		size_prev;
+	// size_t		size_prev;
 	size_t		size;
 	struct	s_block	*next;
 	struct	s_block	*prev;
@@ -26,4 +26,7 @@ void	*ft_malloc(size_t size);
 void	*alloc_zone(size_t size_block);
 void 	show_zone(void *zone);
 
+void	set_block(void *zone, size_t size);
+void	del_block(void *zone);
+void	*find_block(void *zone, size_t size);
 #endif
