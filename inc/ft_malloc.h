@@ -29,4 +29,5 @@ void 	show_zone(void *zone);
 void	set_block(void *zone, size_t size);
 void	del_block(void *zone);
 void	*find_block(void *zone, size_t size);
+void	ft_free(void *ptr);
 #endif

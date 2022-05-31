@@ -30,3 +30,10 @@ void	*ft_malloc(size_t size) {
 	// show_zone(g_zones.tiny);
 	return (zone + sizeof(t_block));
 }
+
+void	ft_free(void *ptr) {
+	t_block *block;
+
+	block = ptr - sizeof(t_block);
+	del_block(block);
+}

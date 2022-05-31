@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "ft_malloc.h"
 
+extern t_zones g_zones;
 void	init_block(void *zone, size_t size)
 {
 	t_block *block;
@@ -26,6 +27,7 @@ void	set_block(void *zone, size_t size)
 		next = zone + sizeof(t_block) + size;
 		init_block((void*)next, block->size - size - sizeof(t_block));
 		next->prev = block;
+		next->next = block->next;
 		// next->size_prev = size;
 	}
 	block->next = next;
@@ -35,16 +37,26 @@ void	set_block(void *zone, size_t size)
 void	del_block(void *zone) {
 	t_block *block;
 	t_block *next;
+	t_block *prev;
 
 	block = zone;
+	block->free = 1;
 	next = block->next;
+	prev = block->prev;
+	if (prev && prev->free == 1) {
+		ft_printf("prev <---\n");
+		del_block(prev);
+	}
 	if (next && next->free == 1) {
-		del_block((void*)block->next);
+		ft_printf("next -->\n");
 		block->size += next->size;
 		block->next = next->next;
+		(next->next)->prev = block;
+		if (block->next && (block->next)->free == 1) {
+			del_block(block->next);
+		}
 	}
-	// delete before
-	block->free = 1;
+
 }
 
 void	*find_block(void *zone, size_t size) {
