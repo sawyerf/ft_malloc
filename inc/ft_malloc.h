@@ -25,6 +25,7 @@ typedef struct	s_block {
 void	*ft_malloc(size_t size);
 void	*alloc_zone(size_t size_block);
 void 	show_zone(void *zone);
+void 	light_show_zone(void *zone);
 
 void	set_block(void *zone, size_t size);
 void	del_block(void *zone);

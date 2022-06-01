@@ -39,19 +39,27 @@ void	del_block(void *zone) {
 	t_block *next;
 	t_block *prev;
 
+	// light_show_zone(g_zones.tiny);
 	block = zone;
 	block->free = 1;
-	next = block->next;
+	// ft_printf("next: %p\n", block->next);
+	// ft_printf("prev: %p\n", block->prev);
+	// ft_printf("prev: %p\n", (block->next)->prev);
+	// ft_printf("size: %d\n", block->size);
+	// ft_printf("next: %p\n", );
 	prev = block->prev;
 	if (prev && prev->free == 1) {
-		ft_printf("prev <---\n");
-		del_block(prev);
+		// ft_printf("prev <--\n");
+		return del_block(prev);
 	}
+	next = block->next;
 	if (next && next->free == 1) {
-		ft_printf("next -->\n");
+		// ft_printf("next -->\n");
 		block->size += next->size;
 		block->next = next->next;
-		(next->next)->prev = block;
+		if (next->next) {
+			(next->next)->prev = block;
+		}
 		if (block->next && (block->next)->free == 1) {
 			del_block(block->next);
 		}

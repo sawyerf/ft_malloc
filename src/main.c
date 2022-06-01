@@ -23,9 +23,10 @@ int main() {
 	tab[3] = ft_malloc(3);
 	tab[4] = ft_malloc(25);
 	tab[5] = ft_malloc(15);
-	show_zone(g_zones.tiny);
+	// show_zone(g_zones.tiny);
 	for (int index = 0; index < 100; index++) {
+		// ft_printf("%d\n", index);
 		ft_free(tab[index]);
+		// light_show_zone(g_zones.tiny);
 	}
-	show_zone(g_zones.tiny);
 }
