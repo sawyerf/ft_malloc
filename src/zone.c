@@ -3,6 +3,7 @@
 #include "ft_malloc.h"
 
 extern t_zones g_zones;
+
 void	init_block(void *zone, size_t size)
 {
 	t_block *block;
@@ -15,8 +16,7 @@ void	init_block(void *zone, size_t size)
 	block->free = 1;
 }
 
-void	set_block(void *zone, size_t size)
-{
+void	set_block(void *zone, size_t size) {
 	t_block *block;
 	t_block *next;
 
@@ -72,7 +72,7 @@ void	*find_block(void *zone, size_t size) {
 	t_block *prop;
 
 	block = zone;
-	if (!block ) {
+	if (!block) {
 		return (block);
 	}
 	prop = find_block(block->next, size);
@@ -88,6 +88,25 @@ void	*find_block(void *zone, size_t size) {
 		return (block);
 	}
 	return (prop);
+}
+
+t_block	*last_block(void *zone) {
+	for (t_block block = zone; block; block->next)
+}
+
+void	*add_zone(void **zones, size_t size_block) {
+	void	*new;
+	t_block	*block;
+
+	for (zones; tmp_zones[1]; tmp_zones++) {}
+	if (!(new = alloc_zone())) return (NULL);
+	if (!zones[0]) {
+		zones[0] = new;
+	} else {
+		zones[1] = new;
+		block->prev
+	}
+	ft_printf("%p", zones);
 }
 
 void	*alloc_zone(size_t size_block) {

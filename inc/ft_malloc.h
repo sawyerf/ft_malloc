@@ -7,12 +7,21 @@
 # define MAX_SIZE_TINY 32
 # define MAX_SIZE_MEDIUM 64
 
+# define TYPE_TINY 1
+# define TYPE_MEDIUM 2
+# define TYPE_LARGE 3
+
 typedef struct	s_zones
 {
 	void		*tiny;
 	void		*medium;
 	void		*large;
 }				t_zones;
+
+typedef struct	s_zone {
+	void		*zone;
+	char		type;
+}				t_zone;
 
 typedef struct	s_block {
 	// size_t		size_prev;
