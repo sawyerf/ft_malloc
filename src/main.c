@@ -10,10 +10,11 @@ int main() {
 
 	// printf("%d\n", getpagesize());
 	printf("t_block: %ld\n", sizeof(t_block));
+	// ft_malloc(1);
+	// light_show_zone(g_zones.tiny);
 	for (int index = 0; index < size; index++) {
 		if (!(tab[index] = ft_malloc(MAX_SIZE_TINY))) {
 			ft_printf("fin: %d\n", index);
-			// light_show_zone(g_zones.tiny);
 			return (0);
 		}
 	}
