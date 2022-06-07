@@ -29,7 +29,8 @@ void light_show_zone(void *zone) {
 		ft_printf("\n");
 		return ;
 	}
-	ft_printf("#%ld", block->size);
+	if (!block->prev || ((block->prev)->zone != block->zone)) ft_printf("\n%p:\n", block->zone);
+	ft_printf("#%ld", block->size, block->zone);
 	if (!block->free) {
 		ft_printf("***");
 	} else {

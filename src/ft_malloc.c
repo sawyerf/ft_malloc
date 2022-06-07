@@ -20,14 +20,23 @@ void	*get_zone(size_t size) {
 	}
 }
 
+size_t get_sizezone(size_t size) {
+	if (size <= MAX_SIZE_TINY) {
+		return (MAX_SIZE_TINY);
+	} else if (size <= MAX_SIZE_MEDIUM) {
+		return (MAX_SIZE_MEDIUM);
+	} else {
+		return (size);
+	}
+}
+
 void	*ft_malloc(size_t size) {
 	void	*zone;
 
 	if (!size) return (NULL);
-	zone = find_block(get_zone(size), size);
-	if (!zone) return (NULL);
+	if (!(zone = find_freeblock(get_zone(size), size, get_sizezone(size)))) return (NULL);
 	set_block(zone, size);
-	// show_zone(g_zones.tiny);
+	// light_show_zone(g_zones.tiny);
 	return (zone + sizeof(t_block));
 }
 

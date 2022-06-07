@@ -23,12 +23,13 @@ typedef struct	s_zone {
 	char		type;
 }				t_zone;
 
-typedef struct	s_block {
+typedef struct		s_block {
 	// size_t		size_prev;
-	size_t		size;
+	size_t			size;
 	struct	s_block	*prev;
 	struct	s_block	*next;
-	char		free;
+	void			*zone;
+	char			free;
 }				t_block;
 
 void	*ft_malloc(size_t size);
