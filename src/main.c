@@ -9,6 +9,8 @@ int main() {
 	void *tab[size];
 
 	printf("t_block: %ld\n", sizeof(t_block));
+	// ft_malloc(1);
+	// light_show_zone(g_zones.tiny);
 	for (int index = 0; index < size; index++) {
 		if (!(tab[index] = ft_malloc(MAX_SIZE_TINY))) {
 			memcpy(tab[index], "desbarres", 10);
