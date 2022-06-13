@@ -2,6 +2,14 @@
 
 Reproduction de la celebre fonction malloc
 
+```c
+// ft_printf("next: %p\n", block->next);
+// ft_printf("prev: %p\n", block->prev);
+// ft_printf("prev: %p\n", (block->next)->prev);
+// ft_printf("size: %d\n", block->size);
+// ft_printf("next: %p\n", );
+```
+
 ## Schema Zone
 ```
 +-----------------------------+---------+
