@@ -44,5 +44,11 @@ void	ft_free(void *ptr) {
 	t_block *block;
 
 	block = ptr - sizeof(t_block);
+	light_show_zone(g_zones.tiny);
 	del_block(block);
+	if (g_zones.tiny && g_zones.tiny->free && !g_zones.tiny->next) freeZone(&g_zones.tiny);
+	if (g_zones.medium && g_zones.medium->free && !g_zones.medium->next) freeZone(&g_zones.medium);
+	if (g_zones.large && g_zones.large->free && !g_zones.large->next) freeZone(&g_zones.large);
+	light_show_zone(g_zones.tiny);
+
 }

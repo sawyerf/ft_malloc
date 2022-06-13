@@ -41,6 +41,28 @@ void	set_block(void *zone, size_t size) {
 	// ft_printf("size: %d\n", block->size);
 	// ft_printf("next: %p\n", );
 
+void	freeZone(t_block **block) {
+	ft_printf("free: zone %p\n", (*block)->zone);
+	munmap((*block)->zone, (*block)->size + sizeof(t_block));
+	*block = NULL;
+}
+
+void	free_block(t_block *block) {
+	t_block *prev;
+	t_block *next;
+
+	prev = block->prev;
+	next = block->next;
+
+	if (prev) {
+		prev->next = next;
+	}
+	if (next) {
+		next->prev = prev;
+	}
+	freeZone(&block);
+}
+
 void	del_block(void *zone) {
 	t_block *block;
 	t_block *next;
@@ -56,14 +78,19 @@ void	del_block(void *zone) {
 	}
 	next = block->next;
 	if (next && next->free == 1 && next->zone == block->zone) {
-		// ft_printf("next -->\n");
 		block->size += next->size + sizeof(t_block);
 		block->next = next->next;
 		if (next->next) {
 			(next->next)->prev = block;
 		}
-		if (block->next && (block->next)->free == 1) {
-			del_block(block->next);
+		if (block->prev &&
+			(block->prev)->zone != block->zone &&
+			((block->next && (block->next)->zone != block->zone) || !block->next)) {
+			return free_block(block);
+		}
+		if (block && block->next && (block->next)->free == 1) {
+		// ft_printf("next -->\n");
+			return del_block(block->next);
 		}
 	}
 }
@@ -78,7 +105,7 @@ void	*alloc_zone(size_t size_block) {
 	real_size_block = (size_block + sizeof(t_block)) * 100;
 	real_size = real_size_block + page_size - (real_size_block % page_size); // t_block est gros
 	zone = mmap(NULL, real_size, PROT_READ | PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
-	// printf("barres: %ld\n", real_size);
+	ft_printf("barres: %p\n", zone);
 	init_block(zone, real_size - sizeof(t_block), zone);
 	// show_zone(zone);
 	return (zone);
