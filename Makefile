@@ -41,7 +41,7 @@ norm:
 $(NAME): $(OBJ) 
 	@printf "\033[0;32m[$(NAME)] Compilation [OK]\033[0;0m\n"
 	@make -C libft/
-	@$(CC) $(CFLAGS) -shared -o libft_malloc.so $(OBJ) -L ./libft/
+	@$(CC) $(CFLAGS) -shared -o libft_malloc.so $(OBJ) libft/libft.a
 
 clean:
 	@make clean -C libft/

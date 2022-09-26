@@ -2,10 +2,9 @@
 # define FT_MALLOC_H
 
 # include <unistd.h>
-# include "ft_printf.h"
 
-# define MAX_SIZE_TINY 32
-# define MAX_SIZE_MEDIUM 64
+# define MAX_SIZE_TINY 256
+# define MAX_SIZE_MEDIUM 2048
 
 # define TYPE_TINY 1
 # define TYPE_MEDIUM 2

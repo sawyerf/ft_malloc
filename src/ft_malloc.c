@@ -26,11 +26,9 @@ void	*get_zone(size_t size) {
 	} else {
 		zone = (void**)&g_zones.large;
 	}
-	// printf("get_zone: %ld %p\n", sizeZone, zone);
 	if (!*zone) {
 		*zone = alloc_zone(sizeZone);
 	}
-	// printf("get_zone: %p\n", *zone);
 	return *zone;
 }
 
@@ -40,18 +38,16 @@ void	*ft_malloc(size_t size) {
 	if (!size) return (NULL);
 	if (!(zone = find_freeblock(get_zone(size), size, get_sizezone(size)))) return (NULL);
 	set_block(zone, size);
-	// light_show_zone(g_zones.tiny);
 	return (zone + sizeof(t_block));
 }
 
 void	ft_free(void *ptr) {
 	t_block *block;
 
+	if (!ptr) return ;
 	block = ptr - sizeof(t_block);
-	// show_zone(g_zones.tiny);
 	del_block(block);
 	if (g_zones.tiny && g_zones.tiny->free && !g_zones.tiny->next) freeZone(&g_zones.tiny);
 	if (g_zones.medium && g_zones.medium->free && !g_zones.medium->next) freeZone(&g_zones.medium);
 	if (g_zones.large && g_zones.large->free && !g_zones.large->next) freeZone(&g_zones.large);
-	// show_zone(g_zones.tiny);
 }
