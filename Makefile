@@ -8,7 +8,7 @@ INC_FILE =	ft_malloc.h
 		
 SRC_DIR =	src
 
-SRC_FILE =	main.c \
+SRC_FILE =	malloc.c \
 			ft_malloc.c \
 			zone.c \
 			debug.c \
@@ -31,17 +31,17 @@ all: $(NAME)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile
 	@printf "\033[0;32m[$(NAME)] Compilation [o.]\033[0;0m\r"
 	@mkdir -p $(CRT) 2> /dev/null || true
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@ -fPIC
 	@printf "\033[0;32m[$(NAME)] Compilation [.o]\033[0;0m\r"
 
 norm:
 	@norminette $(SRC)
 	@norminette $(INC)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) 
 	@printf "\033[0;32m[$(NAME)] Compilation [OK]\033[0;0m\n"
 	@make -C libft/
-	@$(CC) $(CFLAGS) $(DEBUG) $(OBJ) libft/libft.a  -o $(NAME)
+	@$(CC) $(CFLAGS) -shared -o libft_malloc.so $(OBJ) -L ./libft/
 
 clean:
 	@make clean -C libft/
