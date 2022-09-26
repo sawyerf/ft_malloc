@@ -32,15 +32,18 @@ typedef struct	s_zones
 	t_block		*large;
 }				t_zones;
 
+void	*malloc(size_t size);
+void	free(void *ptr);
+
 void	*ft_malloc(size_t size);
+void	ft_free(void *ptr);
+
 void	*alloc_zone(size_t size_block);
 void 	show_zone(void *zone);
 void 	light_show_zone(void *zone);
-
 void	set_block(void *zone, size_t size);
 void	del_block(void *zone);
 void	*find_block(void *zone, size_t size);
-void	ft_free(void *ptr);
 void	*find_freeblock(void *zone, size_t size, size_t page_size);
 void	freeZone(t_block **block);
 #endif
