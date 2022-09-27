@@ -1,10 +1,12 @@
 #include <sys/mman.h>
 #include <stdio.h>
+#include <stdint.h>
 #include "ft_malloc.h"
+#include "libft.h"
 
 extern t_zones g_zones;
 
-void	init_block(void *zone, size_t size, void *ori)
+void	init_block(void *zone, size_t size, unsigned int ori)
 {
 	t_block *block;
 
@@ -35,7 +37,7 @@ void	set_block(void *zone, size_t size) {
 
 
 void	freeZone(t_block **block) {
-	munmap((*block)->zone, (*block)->size + sizeof(t_block));
+	munmap(*block, (*block)->size + sizeof(t_block));
 	*block = NULL;
 }
 
@@ -91,10 +93,13 @@ void	*alloc_zone(size_t size_block) {
 	size_t	page_size;
 	
 	page_size = getpagesize();
-	real_size_block = (size_block + sizeof(t_block)) * 100;
-	real_size = real_size_block + page_size - (real_size_block % page_size); // t_block est gros
+	real_size_block = (size_block + sizeof(t_block));
+	if (size_block <= MAX_SIZE_MEDIUM) {
+		real_size_block *= 100 ;
+	}
+	real_size = (real_size_block / page_size + 1) * page_size;
 	zone = mmap(NULL, real_size, PROT_READ | PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
-	init_block(zone, real_size - sizeof(t_block), zone);
+	init_block(zone, real_size - sizeof(t_block), 0);
 	return (zone);
 }
 
@@ -114,6 +119,7 @@ void	*add_zone(void *zone, size_t size_block) {
 	if (!(new = alloc_zone(size_block))) return (zone);
 	new->prev = last_block(zone);
 	if (!new->prev) return new;
+	new->zone = (new->prev)->zone + 1;
 	(new->prev)->next = new;
 	return zone;
 }

@@ -16,11 +16,10 @@ typedef struct	s_zone {
 }				t_zone;
 
 typedef struct		s_block {
-	// size_t		size_prev;
 	size_t			size;
 	struct	s_block	*prev;
 	struct	s_block	*next;
-	void			*zone;
+	unsigned		zone;
 	char			free;
 }				t_block;
 
@@ -45,4 +44,6 @@ void	del_block(void *zone);
 void	*find_block(void *zone, size_t size);
 void	*find_freeblock(void *zone, size_t size, size_t page_size);
 void	freeZone(t_block **block);
+void	show_alloc_mem(void);
+
 #endif

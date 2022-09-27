@@ -14,7 +14,7 @@ SRC_FILE =	malloc.c \
 			debug.c \
 			
 
-CFLAGS =	-I $(INC_DIR) -I libft/inc/ -Wall -g -lm -Werror -Wextra
+CFLAGS =	-I $(INC_DIR) -I libft/inc/ -Wall -lm -Werror -Wextra
 
 OBJ_DIR =	.obj
 OBJ_FILE =	$(SRC_FILE:.c=.o)
@@ -42,6 +42,9 @@ $(NAME): $(OBJ)
 	@printf "\033[0;32m[$(NAME)] Compilation [OK]\033[0;0m\n"
 	@make -C libft/
 	@$(CC) $(CFLAGS) -shared -o libft_malloc.so $(OBJ) libft/libft.a
+	gcc srcTest/test.c -o test
+	gcc srcTest/test1.c -o test1
+	gcc srcTest/test2.c -o test2
 
 clean:
 	@make clean -C libft/

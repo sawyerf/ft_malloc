@@ -1,6 +1,8 @@
 #include "ft_malloc.h"
 #include "libft.h"
 
+extern t_zones g_zones;
+
 void show_zone(void *zone) {
 	t_block *block;
 
@@ -40,4 +42,15 @@ void light_show_zone(void *zone) {
 		ft_putstr("...");
 	}
 	return light_show_zone(block->next);
+}
+
+void show_alloc_mem(void) {
+	ft_putstr("======================\n");
+	ft_putstr("# TINY\n");
+	light_show_zone(g_zones.tiny);
+	ft_putstr("# SMALL\n");
+	light_show_zone(g_zones.medium);
+	ft_putstr("# LARGE\n");
+	light_show_zone(g_zones.large);
+	ft_putstr("======================\n");
 }
