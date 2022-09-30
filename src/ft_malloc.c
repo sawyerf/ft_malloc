@@ -2,41 +2,23 @@
 #include <stdio.h>
 #include "ft_malloc.h"
 
-t_zones g_zones;
+t_zones	g_zone = NULL;
 
-size_t get_sizezone(size_t size) {
+int	get_sizezone(size_t size) {
 	if (size <= MAX_SIZE_TINY) {
-		return (MAX_SIZE_TINY);
+		return (tiny);
 	} else if (size <= MAX_SIZE_MEDIUM) {
-		return (MAX_SIZE_MEDIUM);
+		return (medium);
 	} else {
-		return (size);
+		return (large);
 	}
-}
-
-void	*get_zone(size_t size) {
-	void	**zone;
-	size_t	sizeZone;
-
-	sizeZone = get_sizezone(size);
-	if (sizeZone == MAX_SIZE_TINY) {
-		zone = (void**)&g_zones.tiny;
-	} else if (sizeZone == MAX_SIZE_MEDIUM) {
-		zone = (void**)&g_zones.medium;
-	} else {
-		zone = (void**)&g_zones.large;
-	}
-	if (!*zone) {
-		*zone = alloc_zone(sizeZone);
-	}
-	return *zone;
 }
 
 void	*ft_malloc(size_t size) {
 	void	*zone;
 
 	if (!size) return (NULL);
-	if (!(zone = find_freeblock(get_zone(size), size, get_sizezone(size)))) return (NULL);
+	if (!(zone = find_freeblock(size, get_sizezone(size)))) return (NULL);
 	set_block(zone, size);
 	return (zone + sizeof(t_block));
 }

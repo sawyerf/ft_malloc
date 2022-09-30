@@ -10,7 +10,8 @@ SRC_DIR =	src
 
 SRC_FILE =	malloc.c \
 			ft_malloc.c \
-			zone.c \
+			allocZone.c \
+			freeZone.c \
 			debug.c \
 			
 
