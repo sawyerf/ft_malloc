@@ -11,8 +11,6 @@ void	ft_putvarint(char *name, long long int var) {
 }
 
 void showBlocks(t_block *block, unsigned int sizeZone) {
-	int sizeBlock;
-
 	if (sizeZone <= 0) {
 		return ;
 	}
@@ -23,8 +21,7 @@ void showBlocks(t_block *block, unsigned int sizeZone) {
 	} else {
 		ft_putstr("...");
 	}
-	sizeBlock = sizeof(t_block) + block->size;
-	return showBlocks((void*)block + sizeBlock, sizeZone - sizeBlock);
+	return showBlocks(getNextBlock(block), sizeZone - (sizeof(t_block) + block->size));
 }
 
 void show_alloc_mem(void) {
@@ -38,7 +35,7 @@ void show_alloc_mem(void) {
 			ft_putnbr(g_zone.zones[index]->size);
 			ft_putstr(" ===#\n");
 			showBlocks(
-				(t_block*)((void*)g_zone.zones[index] + sizeof(t_zone)),
+				getFirstBlock(g_zone.zones[index]),
 				g_zone.zones[index]->size
 			);
 		}

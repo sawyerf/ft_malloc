@@ -18,9 +18,7 @@ int	get_sizezone(size_t size) {
 void	*ft_malloc(size_t size) {
 	void	*block;
 
-	ft_putvarint("size", size);
 	if (!size) {
-		ft_putstr("lol\n");
 		show_alloc_mem();
 		return (NULL);
 	}

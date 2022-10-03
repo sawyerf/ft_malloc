@@ -42,13 +42,23 @@ void	free(void *ptr);
 void	*ft_malloc(size_t size);
 void	ft_free(void *ptr);
 
+// allocZone
 void	*alloc_zone(size_t size_block);
 void	set_block(t_block *block, size_t size);
 void	*find_freeblock(size_t size, t_type_zone typeZone);
+
+// freeZone
 // void	del_block(void *zone);
 // void	freeZone(t_block **block);
 
+// debug
 void	show_alloc_mem(void);
 void	ft_putvarint(char *name, long long int var);
+
+// zone
+t_block     *getNextBlock(t_block *block);
+t_block     *getFirstBlock(void *zone);
+void    initZone(t_zone *zone, t_type_zone typeZone, size_t size);
+void	initBlock(void *zone, size_t size, unsigned int indexZone);
 
 #endif

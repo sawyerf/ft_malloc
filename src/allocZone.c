@@ -6,22 +6,11 @@
 
 extern t_zones g_zone;
 
-
-void	init_block(void *zone, size_t size, unsigned int indexZone)
-{
-	t_block *block;
-
-	block = zone;
-	block->size = size;
-	block->free = 1;
-	block->indexZone = indexZone;
-}
-
 // set variable of new allcate block
 void	set_block(t_block *block, size_t size) {
 	block->free = 0;
 	if (block->size - size >= sizeof(t_block)) {
-		init_block(
+		initBlock(
 			(void*)block + sizeof(t_block) + size,
 			block->size - size - sizeof(t_block),
 			block->indexZone
@@ -58,9 +47,8 @@ void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 	}
 	real_size = (real_size_block / page_size + 1) * page_size;
 	zone = secuMunmap(real_size);
-	zone->type = typeZone;
-	zone->size = real_size - sizeof(t_zone);
-	init_block((void*)zone + sizeof(t_zone), real_size - sizeof(t_zone) - sizeof(t_block), 0);
+	initZone(zone, typeZone, real_size - sizeof(t_zone));
+	initBlock(getFirstBlock(zone), real_size - sizeof(t_zone) - sizeof(t_block), 0);
 	return (zone);
 }
 
@@ -85,7 +73,7 @@ int addZoneToTab(t_zone *zone) {
 	for (unsigned int index = 0; index < g_zone.size; index++) {
 		if (!g_zone.zones[index]) {
 			g_zone.zones[index] = zone;
-			block = (void*)zone + sizeof(t_zone);
+			block = getFirstBlock(zone);
 			block->indexZone = index;
 			return 1;
 		}
@@ -112,7 +100,7 @@ t_block	*findFreeBlock(t_block *block, size_t size, size_t sizeZone) {
 		return (block);
 	}
 	return findFreeBlock(
-		(void*)block + sizeof(t_block) + block->size,
+		getNextBlock(block),
 		size,
 		sizeZone - sizeof(t_block) - block->size);
 }
@@ -123,7 +111,7 @@ void	*findBlock(size_t size, t_type_zone typeZone) {
 	for (unsigned int index = 0; index < g_zone.size; index++) {
 		if (g_zone.zones[index] && g_zone.zones[index]->type == typeZone) {
 			block = findFreeBlock(
-				(void*)g_zone.zones[index] + sizeof(t_zone),
+				getFirstBlock(g_zone.zones[index]),
 				size,
 				g_zone.zones[index]->size
 			);
