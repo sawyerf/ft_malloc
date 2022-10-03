@@ -1,39 +1,19 @@
 #include "ft_malloc.h"
 #include "libft.h"
 
-extern t_zones g_zones;
+extern t_zones g_zone;
 
-void show_zone(void *zone) {
-	t_block *block;
-
-	block = zone;
-	if (!block) {
-		ft_putstr("\n");
-		return ;
-	}
-	// for (size_t size = sizeof(t_block); size; size--) {
-	ft_putchar('#');
-	ft_putnbr(block->size);
-	// }
-	for (size_t size = block->size; size; size--) {
-		if (!block->free) {
-			ft_putstr("*");
-		} else {
-			ft_putstr(".");
-		}
-	}
-	return show_zone(block->next);
+void	ft_putvarint(char *name, long long int var) {
+	ft_putstr(name);
+	ft_putstr(" = ");
+	ft_putnbr(var);
+	ft_putchar('\n');
 }
 
-void light_show_zone(void *zone) {
-	t_block *block;
-
-	block = zone;
-	if (!block) {
-		ft_putstr("\n");
+void showBlocks(t_block *block, unsigned int sizeZone) {
+	if (sizeZone <= 0) {
 		return ;
 	}
-	// if (!block->prev || ((block->prev)->zone != block->zone)) printf("\n%p:\n", block->zone);
 	ft_putchar('#');
 	ft_putnbr(block->size);
 	if (!block->free) {
@@ -41,16 +21,24 @@ void light_show_zone(void *zone) {
 	} else {
 		ft_putstr("...");
 	}
-	return light_show_zone(block->next);
+	return showBlocks(getNextBlock(block), sizeZone - (sizeof(t_block) + block->size));
 }
 
 void show_alloc_mem(void) {
-	ft_putstr("======================\n");
-	ft_putstr("# TINY\n");
-	light_show_zone(g_zones.tiny);
-	ft_putstr("# SMALL\n");
-	light_show_zone(g_zones.medium);
-	ft_putstr("# LARGE\n");
-	light_show_zone(g_zones.large);
-	ft_putstr("======================\n");
+	for (unsigned int index = 0; index < g_zone.size; index++) {
+		if (g_zone.zones[index]) {
+			ft_putstr("\n#=== Tab index = ");
+			ft_putnbr(index);
+			ft_putstr(", type = ");
+			ft_putnbr(g_zone.zones[index]->type);
+			ft_putstr(", size = ");
+			ft_putnbr(g_zone.zones[index]->size);
+			ft_putstr(" ===#\n");
+			showBlocks(
+				getFirstBlock(g_zone.zones[index]),
+				g_zone.zones[index]->size
+			);
+		}
+	}
+	ft_putstr("\n\n");
 }

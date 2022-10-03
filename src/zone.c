@@ -1,160 +1,54 @@
-#include <sys/mman.h>
 #include <stdio.h>
 #include <stdint.h>
 #include "ft_malloc.h"
 #include "libft.h"
 
-extern t_zones g_zones;
+extern t_zones g_zone;
 
-void	init_block(void *zone, size_t size, unsigned int ori)
+void    initZone(t_zone *zone, t_type_zone typeZone, size_t size) {
+    zone->type = typeZone;
+	zone->size = size;
+}
+
+void	initBlock(void *zone, size_t size, unsigned int indexZone)
 {
 	t_block *block;
 
 	block = zone;
 	block->size = size;
-	block->next = NULL;
-	block->prev = NULL;
 	block->free = 1;
-	block->zone = ori;
+	block->indexZone = indexZone;
 }
 
-void	set_block(void *zone, size_t size) {
-	t_block *block;
-	t_block *next;
+t_block     *getFirstBlock(void *zone) {
+    return zone + sizeof(t_zone);
+}
 
-	block = zone;
-	block->free = 0;
+t_block     *getNextBlock(t_block *block) {
+    return ((void*)block + sizeof(t_block) + block->size);
+}
+
+t_block		*getPrevBlock(t_block *block) {
+	t_block	*prev;
+	t_block *next;
+	
 	next = NULL;
-	if (block->size - size >= sizeof(t_block)) {
-		next = zone + sizeof(t_block) + size;
-		init_block((void*)next, block->size - size - sizeof(t_block), block->zone);
-		next->prev = block;
-		next->next = block->next;
+	prev = getFirstBlock(g_zone.zones[block->indexZone]);
+	while (block != prev) {
+		next = getNextBlock(prev);
+		if (next == block) return (prev);
+		prev = next;
 	}
-	block->next = next;
-	block->size = size;
+	return (NULL);
 }
 
+int	isLastBlock(t_block *block) {
+	t_zone *zone;
 
-void	freeZone(t_block **block) {
-	munmap(*block, (*block)->size + sizeof(t_block));
-	*block = NULL;
-}
-
-void	free_block(t_block *block) {
-	t_block *prev;
-	t_block *next;
-
-	prev = block->prev;
-	next = block->next;
-
-	if (prev) {
-		prev->next = next;
-	}
-	if (next) {
-		next->prev = prev;
-	}
-	freeZone(&block);
-}
-
-void	del_block(void *zone) {
-	t_block *block;
-	t_block *next;
-	t_block *prev;
-
-	block = zone;
-	block->free = 1;
-	prev = block->prev;
-	if (prev && prev->free == 1 && prev->zone == block->zone) {
-		return del_block(prev);
-	}
-	next = block->next;
-	if (next && next->free == 1 && next->zone == block->zone) {
-		block->size += next->size + sizeof(t_block);
-		block->next = next->next;
-		if (next->next) {
-			(next->next)->prev = block;
-		}
-		if (block->prev &&
-			(block->prev)->zone != block->zone &&
-			((block->next && (block->next)->zone != block->zone) || !block->next)) {
-			return free_block(block);
-		}
-		if (block && block->next && (block->next)->free == 1) {
-			return del_block(block->next);
-		}
-	}
-}
-
-void	*alloc_zone(size_t size_block) {
-	void	*zone;
-	size_t	real_size;
-	size_t	real_size_block;
-	size_t	page_size;
-	
-	page_size = getpagesize();
-	real_size_block = (size_block + sizeof(t_block));
-	if (size_block <= MAX_SIZE_MEDIUM) {
-		real_size_block *= 100 ;
-	}
-	real_size = (real_size_block / page_size + 1) * page_size;
-	zone = mmap(NULL, real_size, PROT_READ | PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
-	init_block(zone, real_size - sizeof(t_block), 0);
-	return (zone);
-}
-
-t_block	*last_block(void *zone) {
-	t_block *block;
-
-	block = zone;
-	while (block && block->next) {
-		block = block->next;
-	}
-	return block;
-}
-
-void	*add_zone(void *zone, size_t size_block) {
-	t_block	*new;
-
-	if (!(new = alloc_zone(size_block))) return (zone);
-	new->prev = last_block(zone);
-	if (!new->prev) return new;
-	new->zone = (new->prev)->zone + 1;
-	(new->prev)->next = new;
-	return zone;
-}
-
-void	*find_freeblock(void *zone, size_t size, size_t size_block) {
-	void *free_block;
-	
-	free_block = find_block(zone, size);
-	if (free_block) {
-		return free_block;
+	zone = g_zone.zones[block->indexZone];
+	if ((void*)getFirstBlock(zone) + zone->size == getNextBlock(block)) {
+		return 1;
 	} else {
-		add_zone(zone, size_block);
-		return find_block(zone, size);
+		return 0;
 	}
-}
-
-void	*find_block(void *zone, size_t size) {
-	t_block *block;
-	t_block *prop;
-
-	block = zone;
-	if (!block) {
-		return (block);
-	}
-	prop = find_block(block->next, size);
-	if (!block->free) return (prop);
-	if (block->size == size) return (block);
-	if (prop && (prop->size == size || prop->size < block->size)) {
-		return (prop);
-	}
-	if (block->next && block->size >= size + sizeof(t_block)) {
-		return (block);
-	}
-	if (!block->next && block->size >= size) {
-		return (block);
-	}
-	return (prop);
 }

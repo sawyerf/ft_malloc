@@ -53,3 +53,5 @@ dkms.conf
 ft_malloc
 *lol*
 *test*
+mallocTest
+mallocMain
