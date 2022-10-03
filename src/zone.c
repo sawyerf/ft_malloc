@@ -3,6 +3,8 @@
 #include "ft_malloc.h"
 #include "libft.h"
 
+extern t_zones g_zone;
+
 void    initZone(t_zone *zone, t_type_zone typeZone, size_t size) {
     zone->type = typeZone;
 	zone->size = size;
@@ -24,4 +26,29 @@ t_block     *getFirstBlock(void *zone) {
 
 t_block     *getNextBlock(t_block *block) {
     return ((void*)block + sizeof(t_block) + block->size);
+}
+
+t_block		*getPrevBlock(t_block *block) {
+	t_block	*prev;
+	t_block *next;
+	
+	next = NULL;
+	prev = getFirstBlock(g_zone.zones[block->indexZone]);
+	while (block != prev) {
+		next = getNextBlock(prev);
+		if (next == block) return (prev);
+		prev = next;
+	}
+	return (NULL);
+}
+
+int	isLastBlock(t_block *block) {
+	t_zone *zone;
+
+	zone = g_zone.zones[block->indexZone];
+	if ((void*)getFirstBlock(zone) + zone->size == getNextBlock(block)) {
+		return 1;
+	} else {
+		return 0;
+	}
 }

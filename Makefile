@@ -11,6 +11,7 @@ SRC_DIR =	src
 SRC_FILE =	malloc.c \
 			ft_malloc.c \
 			allocZone.c \
+			freeZone.c \
 			zone.c \
 			debug.c \
 

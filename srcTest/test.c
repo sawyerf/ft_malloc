@@ -13,5 +13,6 @@ int      main()
 	   //	free(addr);
       i++;
    }
+   addr = malloc(0);
    return (0);
 }

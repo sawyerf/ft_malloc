@@ -28,12 +28,7 @@ void	*ft_malloc(size_t size) {
 }
 
 void	ft_free(void *ptr) {
-	// t_block *block;
-	(void)ptr;
-	// if (!ptr) return ;
-	// block = ptr - sizeof(t_block);
-	// del_block(block);
-	// if (g_zones.tiny && g_zones.tiny->free && !g_zones.tiny->next) freeZone(&g_zones.tiny);
-	// if (g_zones.medium && g_zones.medium->free && !g_zones.medium->next) freeZone(&g_zones.medium);
-	// if (g_zones.large && g_zones.large->free && !g_zones.large->next) freeZone(&g_zones.large);
+	if (!ptr) return ;
+	removeBlock(ptr - sizeof(t_block));
+	freeZone();
 }

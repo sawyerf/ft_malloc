@@ -6,52 +6,41 @@
 
 extern t_zones g_zone;
 
-void	freeZone(t_zone *zone) {
-	munmap(*block, (*block)->size + sizeof(t_block));
-	*block = NULL;
+void	freeZone() {
+	int counterTypeZone[4];
+	t_zone	*zone;
+
+	counterTypeZone[0] = 0;
+	counterTypeZone[1] = 0;
+	counterTypeZone[2] = 0;
+	counterTypeZone[3] = 0;
+	for (unsigned int index = 0; index < g_zone.size; index++) {
+		zone = g_zone.zones[index];
+		if (zone) {
+			counterTypeZone[zone->type]++;
+			if (counterTypeZone[zone->type] > 1
+				&& getFirstBlock(zone)->free && getFirstBlock(zone)->size + sizeof(t_block) == zone->size) {
+				munmap(zone, zone->size + sizeof(t_zone));
+				g_zone.zones[index] = NULL;
+			}
+		}
+	}
 }
 
-void	free_block(t_block *block) {
-	t_block *prev;
-	t_block *next;
-
-	prev = block->prev;
-	next = block->next;
-
-	if (prev) {
-		prev->next = next;
-	}
-	if (next) {
-		next->prev = prev;
-	}
-	freeZone(&block);
-}
-
-void	del_block(void *zone) {
-	t_block *block;
+void	removeBlock(t_block *block) {
 	t_block *next;
 	t_block *prev;
 
-	block = zone;
 	block->free = 1;
-	prev = block->prev;
-	if (prev && prev->free == 1 && prev->zone == block->zone) {
-		return del_block(prev);
+	if (!isLastBlock(block)) {
+		next = getNextBlock(block);
+		if (next->free)	{
+			block->size += sizeof(t_block) + next->size;
+		}
 	}
-	next = block->next;
-	if (next && next->free == 1 && next->zone == block->zone) {
-		block->size += next->size + sizeof(t_block);
-		block->next = next->next;
-		if (next->next) {
-			(next->next)->prev = block;
-		}
-		if (block->prev &&
-			(block->prev)->zone != block->zone &&
-			((block->next && (block->next)->zone != block->zone) || !block->next)) {
-			return free_block(block);
-		}
-		if (block && block->next && (block->next)->free == 1) {
-			return del_block(block->next);
+	if ((prev = getPrevBlock(block))) {
+		if (prev->free) {
+			prev->size += sizeof(t_block) + block->size;
 		}
 	}
 }

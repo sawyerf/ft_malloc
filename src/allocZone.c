@@ -20,6 +20,8 @@ void	set_block(t_block *block, size_t size) {
 }
 
 void	*secuMunmap(size_t size) {
+	ft_putvarint("mmap", size / getpagesize());
+	show_alloc_mem();
 	return mmap(NULL,
 		size,
 		PROT_READ | PROT_WRITE,

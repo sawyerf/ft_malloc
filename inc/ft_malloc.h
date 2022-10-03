@@ -4,7 +4,7 @@
 # include <unistd.h>
 
 # define MAX_SIZE_TINY 256
-# define MAX_SIZE_MEDIUM 2048
+# define MAX_SIZE_MEDIUM 1024
 
 # define TYPE_TINY 1
 # define TYPE_MEDIUM 2
@@ -48,17 +48,19 @@ void	set_block(t_block *block, size_t size);
 void	*find_freeblock(size_t size, t_type_zone typeZone);
 
 // freeZone
-// void	del_block(void *zone);
-// void	freeZone(t_block **block);
+void	removeBlock(t_block *zone);
+void	freeZone();
 
 // debug
 void	show_alloc_mem(void);
 void	ft_putvarint(char *name, long long int var);
 
 // zone
-t_block     *getNextBlock(t_block *block);
-t_block     *getFirstBlock(void *zone);
-void    initZone(t_zone *zone, t_type_zone typeZone, size_t size);
-void	initBlock(void *zone, size_t size, unsigned int indexZone);
+t_block		*getNextBlock(t_block *block);
+t_block		*getFirstBlock(void *zone);
+void		initZone(t_zone *zone, t_type_zone typeZone, size_t size);
+void		initBlock(void *zone, size_t size, unsigned int indexZone);
+int			isLastBlock(t_block *block);
+t_block		*getPrevBlock(t_block *block);
 
 #endif
