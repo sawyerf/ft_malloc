@@ -38,14 +38,16 @@ typedef struct	s_zones
 
 void	*malloc(size_t size);
 void	free(void *ptr);
+void	*realloc(void *ptr, size_t size);
 
 void	*ft_malloc(size_t size);
 void	ft_free(void *ptr);
+void	*ft_realloc(void *ptr, size_t size);
 
 // allocZone
 void	*alloc_zone(size_t size_block);
 void	set_block(t_block *block, size_t size);
-void	*find_freeblock(size_t size, t_type_zone typeZone);
+t_block	*find_freeblock(size_t size, t_type_zone typeZone);
 
 // freeZone
 void	removeBlock(t_block *zone);
@@ -62,5 +64,6 @@ void		initZone(t_zone *zone, t_type_zone typeZone, size_t size);
 void		initBlock(void *zone, size_t size, unsigned int indexZone);
 int			isLastBlock(t_block *block);
 t_block		*getPrevBlock(t_block *block);
+int			getSizeZone(size_t size);
 
 #endif

@@ -20,8 +20,7 @@ void	set_block(t_block *block, size_t size) {
 }
 
 void	*secuMunmap(size_t size) {
-	ft_putvarint("mmap", size / getpagesize());
-	show_alloc_mem();
+	// ft_putvarint("mmap", size / getpagesize());
 	return mmap(NULL,
 		size,
 		PROT_READ | PROT_WRITE,
@@ -125,7 +124,7 @@ void	*findBlock(size_t size, t_type_zone typeZone) {
 	return (NULL);
 }
 
-void	*find_freeblock(size_t size, t_type_zone typeZone) {
+t_block	*find_freeblock(size_t size, t_type_zone typeZone) {
 	void *free_block;
 
 	if (!g_zone.zones) {
