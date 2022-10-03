@@ -11,20 +11,23 @@ SRC_DIR =	src
 SRC_FILE =	malloc.c \
 			ft_malloc.c \
 			allocZone.c \
-			freeZone.c \
 			debug.c \
-			
 
-CFLAGS =	-I $(INC_DIR) -I libft/inc/ -Wall -lm -Werror -Wextra
+SRC_MAIN =	main.c			
+
+CFLAGS =	-I $(INC_DIR) -I libft/inc/ -Wall -lm -Werror -Wextra -g
 
 OBJ_DIR =	.obj
 OBJ_FILE =	$(SRC_FILE:.c=.o)
+OBJ_MAIN =	$(SRC_MAIN:.c=.o)
 
 CRT_DIR =	./
 
 SRC = 		$(addprefix $(SRC_DIR)/,$(SRC_FILE))
+SRCM = 		$(addprefix $(SRC_DIR)/,$(SRC_MAIN))
 INC = 		$(addprefix $(INC_DIR)/,$(INC_FILE))
 OBJ = 		$(addprefix $(OBJ_DIR)/,$(OBJ_FILE))
+OBJM = 		$(addprefix $(OBJ_DIR)/,$(OBJ_MAIN))
 CRT = 		$(addprefix $(OBJ_DIR)/,$(CRT_DIR))
 
 all: $(NAME)
@@ -39,10 +42,11 @@ norm:
 	@norminette $(SRC)
 	@norminette $(INC)
 
-$(NAME): $(OBJ) 
+$(NAME): $(OBJ) $(OBJM)
 	@printf "\033[0;32m[$(NAME)] Compilation [OK]\033[0;0m\n"
 	@make -C libft/
 	@$(CC) $(CFLAGS) -shared -o libft_malloc.so $(OBJ) libft/libft.a
+	@$(CC) $(CFLAGS) $(OBJ) $(OBJM) libft/libft.a -o mallocMain
 	gcc srcTest/test.c -o test
 	gcc srcTest/test1.c -o test1
 	gcc srcTest/test2.c -o test2

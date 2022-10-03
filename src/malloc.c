@@ -6,11 +6,9 @@
 
 void	*malloc(size_t size) {
     void *ret = ft_malloc(size);
-    // show_alloc_mem();
     return ret;
 }
 
 void	free(void *ptr) {
-    // show_alloc_mem();
     ft_free(ptr);
 }
