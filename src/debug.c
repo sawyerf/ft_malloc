@@ -3,6 +3,24 @@
 
 extern t_zones g_zone;
 
+void ft_puthex(unsigned long long int hex, int min) {
+	char	str[23];
+	char	strHex[] = "0123456789ABCDEF";
+	int		index = 23;
+
+	memset(str, '0', 23);
+	while (hex) {
+		index--;
+		str[index] = strHex[hex % 16];
+		hex /= 16;
+	}
+	if (23 - index > min) {
+		write(1, &str[index], 23 - index);
+	} else {
+		write(1, &str[23 - min], min);
+	}
+}
+
 void	ft_putvarint(char *name, long long int var) {
 	ft_putstr(name);
 	ft_putstr(" = ");
@@ -22,6 +40,59 @@ void showBlocks(t_block *block, unsigned int sizeZone) {
 		ft_putstr("...");
 	}
 	return showBlocks(getNextBlock(block), sizeZone - (sizeof(t_block) + block->size));
+}
+
+void showBlocksHex(t_block *block, unsigned int sizeZone) {
+	char	*data;
+	int		isZero = 0;
+
+	if (sizeZone <= 0) {
+		return ;
+	}
+	ft_putstr("| ");
+	ft_putnbr(block->size);
+	ft_putstr(" | ");
+	ft_putnbr(block->free);
+	ft_putstr("    | ");
+	ft_putnbr(block->indexZone);
+	ft_putstr("         | ");
+	data = (void*)block + sizeof(t_block);
+	if (!block->free) {
+		for (size_t index = 0; block->size > index; index++) {
+			if (!isZero && !data[index]) {
+				ft_putstr(" 00...");
+				isZero = 1;
+			} else if (data[index]) {
+				isZero = 0;
+				ft_putchar(' ');
+				ft_puthex(data[index], 2);
+			}
+		}
+	} else {
+		ft_putstr(" ...");
+	}
+	ft_putstr("\n");
+	return showBlocksHex(getNextBlock(block), sizeZone - (sizeof(t_block) + block->size));
+}
+
+void show_alloc_mem_ex(void) {
+	for (unsigned int index = 0; index < g_zone.size; index++) {
+		if (g_zone.zones[index]) {
+			ft_putstr("\n#=== Tab index = ");
+			ft_putnbr(index);
+			ft_putstr(", type = ");
+			ft_putnbr(g_zone.zones[index]->type);
+			ft_putstr(", size = ");
+			ft_putnbr(g_zone.zones[index]->size);
+			ft_putstr(" ===#\n");
+			ft_putstr("| Size | Free | IndexZone | Data |\n");
+			showBlocksHex(
+				getFirstBlock(g_zone.zones[index]),
+				g_zone.zones[index]->size
+			);
+		}
+	}
+	ft_putstr("\n\n");
 }
 
 void show_alloc_mem(void) {

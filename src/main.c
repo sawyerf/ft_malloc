@@ -17,7 +17,7 @@ int main() {
 			printf("ca renvoie NULL\n");
 		}
 	}
-	show_alloc_mem();
+	show_alloc_mem_ex();
 
 	for (int index = 0; index < size; index++) {
 		// if (!(index == 4 || index == 3 || index == 5)) {
@@ -25,5 +25,5 @@ int main() {
 		// }
 	}
 	ft_free(ptr);
-	show_alloc_mem();
+	show_alloc_mem_ex();
 }

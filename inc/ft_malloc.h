@@ -56,6 +56,7 @@ void	freeZone();
 // debug
 void	show_alloc_mem(void);
 void	ft_putvarint(char *name, long long int var);
+void	show_alloc_mem_ex(void);
 
 // zone
 t_block		*getNextBlock(t_block *block);
