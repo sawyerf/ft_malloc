@@ -4,17 +4,17 @@
 # include <unistd.h>
 
 # define MAX_SIZE_TINY 256
-# define MAX_SIZE_MEDIUM 1024
+# define MAX_SIZE_SMALL 1024
 
 # define TYPE_TINY 1
-# define TYPE_MEDIUM 2
+# define TYPE_SMALL 2
 # define TYPE_LARGE 3
 
 typedef enum e_type_zone
 {
 	unused = 0,
 	tiny,
-	medium,
+	small,
 	large
 }			t_type_zone;
 

@@ -11,7 +11,7 @@ int main() {
 	printf("t_block: %ld\n", sizeof(t_block));
 	ptr = ft_malloc(1);
 	for (int index = 0; index < size; index++) {
-		if ((tab[index] = ft_malloc(2000))) {
+		if ((tab[index] = ft_malloc(1024))) {
 			memcpy(tab[index], "desbarres", 10);
 		} else {
 			printf("ca renvoie NULL\n");

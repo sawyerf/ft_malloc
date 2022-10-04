@@ -1,4 +1,8 @@
-NAME =		ft_malloc
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+endif
+
+NAME =		libft_malloc_$(HOSTTYPE).so
 
 CC =		gcc
 
@@ -47,14 +51,15 @@ norm:
 $(NAME): $(OBJ) $(OBJM)
 	@printf "\033[0;32m[$(NAME)] Compilation [OK]\033[0;0m\n"
 	@make -C libft/
-	@$(CC) $(CFLAGS) -shared -o libft_malloc.so $(OBJ) libft/libft.a
+	@$(CC) $(CFLAGS) -shared -o $@ $(OBJ) libft/libft.a
+	@ln -s $@ libft_malloc.so 2>&- || true
 	@$(CC) $(CFLAGS) $(OBJ) $(OBJM) libft/libft.a -o mallocMain
 	gcc srcTest/test.c -o test
 	gcc srcTest/test1.c -o test1
 	gcc srcTest/test2.c -o test2
-	gcc srcTest/test3.c -o test3
-	gcc srcTest/test3bis.c -o test3bis
-	gcc srcTest/test4.c -o test4
+	# gcc srcTest/test3.c -o test3
+	# gcc srcTest/test3bis.c -o test3bis
+	# gcc srcTest/test4.c -o test4
 
 clean:
 	@make clean -C libft/

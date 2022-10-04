@@ -56,8 +56,8 @@ int	isLastBlock(t_block *block) {
 int	getSizeZone(size_t size) {
 	if (size <= MAX_SIZE_TINY) {
 		return (tiny);
-	} else if (size <= MAX_SIZE_MEDIUM) {
-		return (medium);
+	} else if (size <= MAX_SIZE_SMALL) {
+		return (small);
 	} else {
 		return (large);
 	}

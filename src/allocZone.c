@@ -39,8 +39,8 @@ void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 	page_size = getpagesize();
 	if (typeZone == tiny) {
 		sizeBlock = MAX_SIZE_TINY;
-	} else if (typeZone == medium) {
-		sizeBlock = MAX_SIZE_MEDIUM;
+	} else if (typeZone == small) {
+		sizeBlock = MAX_SIZE_SMALL;
 	}
 	real_size_block = (sizeBlock + sizeof(t_block));
 	if (typeZone != large) {
