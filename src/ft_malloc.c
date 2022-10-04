@@ -27,6 +27,7 @@ void	ft_free(void *ptr) {
 void	*ft_realloc(void *ptr, size_t size) {
 	t_block *block;
 	void	*new;
+	size_t	prevSize;
 
 	if (!ptr) return ft_malloc(size);
 	if (!size) {
@@ -36,9 +37,11 @@ void	*ft_realloc(void *ptr, size_t size) {
 	block = ptr - sizeof(t_block);
 
 	if (block->size < size) {
+		prevSize = block->size;
 		removeBlock(block);
 		new = ft_malloc(size);
-		ft_memcpy(new, ptr, block->size);
+		ft_memcpy(new, ptr, prevSize);
+		freeZone();
 		return (new);
 	} else {
 		return (ptr);

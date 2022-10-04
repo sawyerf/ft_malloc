@@ -20,6 +20,8 @@ void	freeZone() {
 			counterTypeZone[zone->type]++;
 			if (counterTypeZone[zone->type] > 1
 				&& getFirstBlock(zone)->free && getFirstBlock(zone)->size + sizeof(t_block) == zone->size) {
+				debug_var("[*] munmap( index=", index, " )");
+				debug_var(" size=", zone->size, "\n");
 				munmap(zone, zone->size + sizeof(t_zone));
 				g_zone.zones[index] = NULL;
 			}
@@ -32,6 +34,7 @@ void	removeBlock(t_block *block) {
 	t_block *prev;
 
 	block->free = 1;
+	debug_var("[*] removeBlock( ", block->size, " )\n");
 	if (!isLastBlock(block)) {
 		next = getNextBlock(block);
 		if (next->free)	{

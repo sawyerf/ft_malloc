@@ -9,6 +9,8 @@ extern t_zones g_zone;
 // set variable of new allcate block
 void	set_block(t_block *block, size_t size) {
 	block->free = 0;
+	debug_var("[*] setBlock( size=", size, " )");
+	debug_var(" indexZone=", block->indexZone, "\n");
 	if (block->size - size >= sizeof(t_block)) {
 		initBlock(
 			(void*)block + sizeof(t_block) + size,
@@ -20,7 +22,8 @@ void	set_block(t_block *block, size_t size) {
 }
 
 void	*secuMunmap(size_t size) {
-	// ft_putvarint("mmap", size / getpagesize());
+	debug_var("[*] mmap( size=", size, " )");
+	debug_var(" page=", size / getpagesize(), "\n");
 	return mmap(NULL,
 		size,
 		PROT_READ | PROT_WRITE,
@@ -36,6 +39,8 @@ void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 	size_t	real_size_block;
 	size_t	page_size;
 	
+	debug_var("[*] allocZone( sizeBlock=", sizeBlock, "");
+	debug_var(", typeZone=", typeZone, " )\n");
 	page_size = getpagesize();
 	if (typeZone == tiny) {
 		sizeBlock = MAX_SIZE_TINY;
@@ -57,6 +62,7 @@ void	allocTabZones() {
 	size_t	pageSize = getpagesize();
 	t_zone	**newZones;
 
+	debug_str("[*] Alloc Tab Zone\n");
 	newZones = secuMunmap((g_zone.numPage + 1) * pageSize);
 	if (g_zone.zones) {
 		ft_memcpy(newZones, g_zone.zones, g_zone.numPage * pageSize);
@@ -93,7 +99,6 @@ void	addZone(size_t size, t_type_zone typeZone) {
 }
 
 t_block	*findFreeBlock(t_block *block, size_t size, size_t sizeZone) {
-	if (size)
 	if (sizeZone <= 0) {
 		return (NULL);
 	}

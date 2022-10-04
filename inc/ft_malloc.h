@@ -18,6 +18,13 @@ typedef enum e_type_zone
 	large
 }			t_type_zone;
 
+typedef enum e_debug
+{
+	notset = 0,
+	activate,
+	desactivate,
+}			t_debug;
+
 typedef struct		s_block {
 	size_t			size;
 	unsigned int	indexZone;
@@ -33,6 +40,7 @@ typedef struct	s_zones
 {
 	unsigned int size;
 	unsigned int numPage;
+	t_debug		 debug;	
 	t_zone		**zones;
 }				t_zones;
 
@@ -57,6 +65,9 @@ void	freeZone();
 void	show_alloc_mem(void);
 void	ft_putvarint(char *name, long long int var);
 void	show_alloc_mem_ex(void);
+void	debug_str(char *str);
+void	debug_var(char *name, long long int var, char *end);
+void	debug_hex(char *name, void *var, char *end);
 
 // zone
 t_block		*getNextBlock(t_block *block);

@@ -12,6 +12,6 @@ int	main()
 	 	addr[0] = 42;
 	 	i++;
 	}
-	addr = (char*)malloc(0);
+	// addr = (char*)malloc(0);
 	return (0);
 }

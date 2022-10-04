@@ -57,9 +57,9 @@ $(NAME): $(OBJ) $(OBJM)
 	gcc srcTest/test.c -o test
 	gcc srcTest/test1.c -o test1
 	gcc srcTest/test2.c -o test2
-	# gcc srcTest/test3.c -o test3
-	# gcc srcTest/test3bis.c -o test3bis
-	# gcc srcTest/test4.c -o test4
+	gcc srcTest/test3.c -o test3
+	gcc srcTest/test3bis.c -o test3bis
+	gcc srcTest/test4.c -o test4
 
 clean:
 	@make clean -C libft/

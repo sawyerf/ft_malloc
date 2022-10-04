@@ -1,5 +1,6 @@
 #include "ft_malloc.h"
 #include "libft.h"
+#include <stdint.h>
 
 extern t_zones g_zone;
 
@@ -19,13 +20,6 @@ void ft_puthex(unsigned long long int hex, int min) {
 	} else {
 		write(1, &str[23 - min], min);
 	}
-}
-
-void	ft_putvarint(char *name, long long int var) {
-	ft_putstr(name);
-	ft_putstr(" = ");
-	ft_putnbr(var);
-	ft_putchar('\n');
 }
 
 void showBlocks(t_block *block, unsigned int sizeZone) {
@@ -112,4 +106,53 @@ void show_alloc_mem(void) {
 		}
 	}
 	ft_putstr("\n\n");
+}
+
+void initDebug() {
+	char *env;
+
+	if (!g_zone.debug) {
+		env = getenv("DEBUG_MALLOC");	
+		if (!ft_strcmp(env, "0")) {
+			g_zone.debug = desactivate;
+		} else if (!ft_strcmp(env, "1")) {
+			g_zone.debug = activate;
+		}
+	}
+}
+
+void debug_str(char *str) {
+	initDebug();
+
+	if (g_zone.debug == activate) {
+		ft_putstr(str);
+	}
+}
+
+void	debug_var(char *name, long long int var, char *end) {
+	initDebug();
+
+	if (g_zone.debug == activate) {
+		ft_putstr(name);
+		ft_putnbr(var);
+		ft_putstr(end);
+	}
+}
+
+void	debug_hex(char *name, void *var, char *end) {
+	initDebug();
+
+	if (g_zone.debug == activate) {
+		ft_putstr(name);
+		ft_putstr("0x");
+		ft_puthex((uintptr_t)var, 8);
+		ft_putstr(end);
+	}
+}
+
+void	ft_putvarint(char *name, long long int var) {
+	ft_putstr(name);
+	ft_putstr(" = ");
+	ft_putnbr(var);
+	ft_putchar('\n');
 }
