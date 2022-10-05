@@ -112,7 +112,7 @@ void initDebug() {
 	char *env;
 
 	if (!g_zone.debug) {
-		env = getenv("DEBUG_MALLOC");	
+		env = getenv("DEBUG_MALLOC");
 		if (!ft_strcmp(env, "0")) {
 			g_zone.debug = desactivate;
 		} else if (!ft_strcmp(env, "1")) {

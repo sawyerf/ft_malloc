@@ -6,6 +6,27 @@
 
 extern t_zones g_zone;
 
+int		checkBlock(void *data) {
+	t_zone	*zone;
+	t_block	*block;
+	size_t	size;
+
+	for (unsigned int index = 0; index < g_zone.size; index++) {
+		zone = g_zone.zones[index];
+		if (zone && (void*)zone + sizeof(t_zone) < (void*)data &&
+			(void*)data <(void*)zone + sizeof(t_zone) + zone->size) {
+			block = (void*)zone + sizeof(t_zone);
+			size = zone->size;
+			while (size) {
+				if ((void*)block + sizeof(t_block) == data) return 1;
+				size -= sizeof(t_block) + block->size;
+				block = getNextBlock(block);
+			}
+		}
+	}
+	return 0;
+}
+
 void	freeZone() {
 	int counterTypeZone[4];
 	t_zone	*zone;

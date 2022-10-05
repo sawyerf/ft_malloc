@@ -65,6 +65,8 @@ clean:
 	@make clean -C libft/
 	@/bin/rm -f $(OBJ)
 	@/bin/rm -rf $(OBJ_DIR)
+	@/bin/rm -f test test1 test2 test3 test3bis test4 mallocMain
+	@/bin/rm -f libft_malloc.so
 	@printf "\033[0;31m[$(NAME)] Deleted *.o\033[0;0m\n"
 
 fclean: clean

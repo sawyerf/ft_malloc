@@ -47,6 +47,9 @@ typedef struct	s_zones
 void	*malloc(size_t size);
 void	free(void *ptr);
 void	*realloc(void *ptr, size_t size);
+// no codo
+void *realloc(void *ptr, size_t size);
+void *reallocarray(void *ptr, size_t nmemb, size_t size);
 
 void	*ft_malloc(size_t size);
 void	ft_free(void *ptr);
@@ -60,6 +63,7 @@ t_block	*find_freeblock(size_t size, t_type_zone typeZone);
 // freeZone
 void	removeBlock(t_block *zone);
 void	freeZone();
+int		checkBlock(void *data);
 
 // debug
 void	show_alloc_mem(void);
