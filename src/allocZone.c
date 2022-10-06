@@ -29,7 +29,7 @@ void	*secuMmap(size_t size) {
 
 	debug_var("[*] mmap( size=", size, " )");
 	debug_var(" page=", nbPage, "\n");
-	getrlimit(RLIMIT_DATA, &rlim);
+	if (getrlimit(RLIMIT_DATA, &rlim) < 0) return (NULL);
 	maxPage = rlim.rlim_cur / getpagesize();
 	if (maxPage < g_zone.pageAlloc + nbPage) return (NULL);
 	g_zone.pageAlloc += nbPage;
@@ -71,7 +71,7 @@ void	allocTabZones() {
 	size_t	pageSize = getpagesize();
 	t_zone	**newZones;
 
-	debug_str("[*] Alloc Tab Zone\n");
+	debug_var("[*] Alloc Tab Zone ( numPage=", g_zone.numPage + 1, " )\n");
 	if (!(newZones = secuMmap((g_zone.numPage + 1) * pageSize))) return ;
 	if (g_zone.zones) {
 		ft_memcpy(newZones, g_zone.zones, g_zone.numPage * pageSize);

@@ -1,6 +1,7 @@
 #include "ft_malloc.h"
 #include "libft.h"
 #include <stdint.h>
+#include <stdlib.h>
 
 extern t_zones g_zone;
 

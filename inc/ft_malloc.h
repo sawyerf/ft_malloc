@@ -45,16 +45,19 @@ typedef struct	s_zones
 	t_zone		**zones;
 }				t_zones;
 
+// malloc
 void	*malloc(size_t size);
 void	free(void *ptr);
 void	*realloc(void *ptr, size_t size);
-// no codo
-void *realloc(void *ptr, size_t size);
-void *reallocarray(void *ptr, size_t nmemb, size_t size);
+void	*calloc(size_t nmemb, size_t size);
+void	*reallocarray(void *ptr, size_t nmemb, size_t size);
 
+// ft_malloc
 void	*ft_malloc(size_t size);
 void	ft_free(void *ptr);
 void	*ft_realloc(void *ptr, size_t size);
+void	*ft_calloc(size_t nmemb, size_t size);
+void	*ft_reallocarray(void *ptr, size_t nmemb, size_t size);
 
 // allocZone
 void	*alloc_zone(size_t size_block);

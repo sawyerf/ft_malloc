@@ -10,11 +10,12 @@ pthread_mutex_t __mutex_shared_variable = (pthread_mutex_t) PTHREAD_MUTEX_INITIA
 void	*ft_malloc(size_t size) {
 	void	*block;
 
-	pthread_mutex_lock(&__mutex_shared_variable);
+		// show_alloc_mem();
 	if (!size) {
 		show_alloc_mem();
 		return (NULL);
 	}
+	pthread_mutex_lock(&__mutex_shared_variable);
 	if (!(block = find_freeblock(size, getSizeZone(size)))) {
 		pthread_mutex_unlock(&__mutex_shared_variable);
 		return (NULL);
@@ -50,7 +51,12 @@ void	*ft_realloc(void *ptr, size_t size) {
 		pthread_mutex_lock(&__mutex_shared_variable);
 		prevSize = block->size;
 		removeBlock(block);
-		new = ft_malloc(size);
+		if (!(new = find_freeblock(size, getSizeZone(size)))) {
+			pthread_mutex_unlock(&__mutex_shared_variable);
+			return (NULL);
+		}
+		set_block(new, size);
+		new += sizeof(t_block);
 		ft_memcpy(new, ptr, prevSize);
 		freeZone();
 		pthread_mutex_unlock(&__mutex_shared_variable);
@@ -58,4 +64,16 @@ void	*ft_realloc(void *ptr, size_t size) {
 	} else {
 		return (ptr);
 	}
+}
+
+void	*ft_calloc(size_t nmemb, size_t size) {
+	if (SIZE_MAX / size < nmemb) return (NULL);
+	void *ret = ft_malloc(nmemb * size);
+    ft_bzero(ret, nmemb * size);
+	return ret;
+}
+
+void	*ft_reallocarray(void *ptr, size_t nmemb, size_t size) {
+	if (SIZE_MAX / size < nmemb) return (NULL);
+	return ft_realloc(ptr, nmemb * size);
 }
