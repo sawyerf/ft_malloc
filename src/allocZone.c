@@ -1,6 +1,7 @@
 #include <sys/mman.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <sys/resource.h>
 #include "ft_malloc.h"
 #include "libft.h"
 
@@ -21,9 +22,17 @@ void	set_block(t_block *block, size_t size) {
 	}
 }
 
-void	*secuMunmap(size_t size) {
+void	*secuMmap(size_t size) {
+	struct rlimit rlim;
+	unsigned long long int maxPage;
+	int nbPage = size / getpagesize();
+
 	debug_var("[*] mmap( size=", size, " )");
-	debug_var(" page=", size / getpagesize(), "\n");
+	debug_var(" page=", nbPage, "\n");
+	getrlimit(RLIMIT_DATA, &rlim);
+	maxPage = rlim.rlim_cur / getpagesize();
+	if (maxPage < g_zone.pageAlloc + nbPage) return (NULL);
+	g_zone.pageAlloc += nbPage;
 	return mmap(NULL,
 		size,
 		PROT_READ | PROT_WRITE,
@@ -52,7 +61,7 @@ void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 		real_size_block *= 100;
 	}
 	real_size = (real_size_block / page_size + 1) * page_size;
-	zone = secuMunmap(real_size);
+	if (!(zone = secuMmap(real_size))) return (NULL);
 	initZone(zone, typeZone, real_size - sizeof(t_zone));
 	initBlock(getFirstBlock(zone), real_size - sizeof(t_zone) - sizeof(t_block), 0);
 	return (zone);
@@ -63,10 +72,10 @@ void	allocTabZones() {
 	t_zone	**newZones;
 
 	debug_str("[*] Alloc Tab Zone\n");
-	newZones = secuMunmap((g_zone.numPage + 1) * pageSize);
+	if (!(newZones = secuMmap((g_zone.numPage + 1) * pageSize))) return ;
 	if (g_zone.zones) {
 		ft_memcpy(newZones, g_zone.zones, g_zone.numPage * pageSize);
-		munmap(g_zone.zones, g_zone.numPage * pageSize);
+		secuMunmap(g_zone.zones, g_zone.numPage * pageSize);
 		ft_memset((void*)*newZones + (g_zone.numPage * pageSize), 0, pageSize);
 	}
 	g_zone.numPage++;

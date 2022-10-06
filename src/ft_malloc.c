@@ -4,7 +4,7 @@
 #include "ft_malloc.h"
 #include "libft.h"
 
-t_zones	g_zone = {0, 0, 0, NULL};
+t_zones	g_zone = {0, 0, 0, 0, NULL};
 pthread_mutex_t __mutex_shared_variable = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 
 void	*ft_malloc(size_t size) {
@@ -15,7 +15,10 @@ void	*ft_malloc(size_t size) {
 		show_alloc_mem();
 		return (NULL);
 	}
-	if (!(block = find_freeblock(size, getSizeZone(size)))) return (NULL);
+	if (!(block = find_freeblock(size, getSizeZone(size)))) {
+		pthread_mutex_unlock(&__mutex_shared_variable);
+		return (NULL);
+	}
 	set_block(block, size);
 	pthread_mutex_unlock(&__mutex_shared_variable);
 	return (block + sizeof(t_block));

@@ -40,6 +40,7 @@ typedef struct	s_zones
 {
 	unsigned int size;
 	unsigned int numPage;
+	unsigned long long int pageAlloc;
 	t_debug		 debug;	
 	t_zone		**zones;
 }				t_zones;
@@ -64,6 +65,7 @@ t_block	*find_freeblock(size_t size, t_type_zone typeZone);
 void	removeBlock(t_block *zone);
 void	freeZone();
 int		checkBlock(void *data);
+void	secuMunmap(void *ptr, size_t size);
 
 // debug
 void	show_alloc_mem(void);

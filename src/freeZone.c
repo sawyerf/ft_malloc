@@ -6,6 +6,13 @@
 
 extern t_zones g_zone;
 
+void	secuMunmap(void *ptr, size_t size) {
+	debug_hex("[*] munmap( ptr=", ptr, "");
+	debug_var(", size=", size, " )\n");
+	g_zone.pageAlloc -= size / getpagesize();
+	munmap(ptr, size);
+}
+
 int		checkBlock(void *data) {
 	t_zone	*zone;
 	t_block	*block;
@@ -41,9 +48,8 @@ void	freeZone() {
 			counterTypeZone[zone->type]++;
 			if (counterTypeZone[zone->type] > 1
 				&& getFirstBlock(zone)->free && getFirstBlock(zone)->size + sizeof(t_block) == zone->size) {
-				debug_var("[*] munmap( index=", index, " )");
-				debug_var(" size=", zone->size, "\n");
-				munmap(zone, zone->size + sizeof(t_zone));
+				debug_var("[*] Free zone index=", index, "\n");
+				secuMunmap(zone, zone->size + sizeof(t_zone));
 				g_zone.zones[index] = NULL;
 			}
 		}
