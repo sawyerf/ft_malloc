@@ -28,10 +28,16 @@ void	*secuMmap(size_t size) {
 	int nbPage = size / getpagesize();
 
 	debug_var("[*] mmap( size=", size, " )");
-	debug_var(" page=", nbPage, "\n");
+	debug_var(" page=", nbPage, "");
+	debug_var(", pageAlloc=", g_zone.pageAlloc, "");
 	if (getrlimit(RLIMIT_DATA, &rlim) < 0) return (NULL);
 	maxPage = rlim.rlim_cur / getpagesize();
-	if (maxPage < g_zone.pageAlloc + nbPage) return (NULL);
+	debug_var(", maxPage=", maxPage, "\n");
+	if (maxPage < g_zone.pageAlloc + nbPage) {
+		debug_var("Limit of memory, can't mmap. ( maxPage=", maxPage, "");
+		debug_var(", pageAlloc=", g_zone.pageAlloc, " )");
+		return (NULL);
+	}
 	g_zone.pageAlloc += nbPage;
 	return mmap(NULL,
 		size,

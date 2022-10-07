@@ -37,7 +37,7 @@ void showBlocks(t_block *block, unsigned int sizeZone) {
 	return showBlocks(getNextBlock(block), sizeZone - (sizeof(t_block) + block->size));
 }
 
-void showBlocksHex(t_block *block, unsigned int sizeZone) {
+void showBlocksHex(t_block *block, size_t sizeZone) {
 	char	*data;
 	int		isZero = 0;
 

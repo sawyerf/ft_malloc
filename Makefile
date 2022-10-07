@@ -57,6 +57,7 @@ testo:
 	gcc srcTest/test3.c -o test3
 	gcc srcTest/test3bis.c -o test3bis
 	gcc srcTest/test4.c -o test4
+	gcc srcTest/testThread.c -o testThread -lpthread
 
 $(NAME): $(OBJ) $(OBJM)
 	@printf "\033[0;32m[$(NAME)] Compilation [OK]\033[0;0m\n"
@@ -69,7 +70,7 @@ clean:
 	@make clean -C libft/
 	@/bin/rm -f $(OBJ)
 	@/bin/rm -rf $(OBJ_DIR)
-	@/bin/rm -f test test1 test2 test3 test3bis test4 mallocMain
+	@/bin/rm -f test test1 test2 test3 test3bis test4 mallocMain testThread myTest
 	@/bin/rm -f libft_malloc.so
 	@printf "\033[0;31m[$(NAME)] Deleted *.o\033[0;0m\n"
 
