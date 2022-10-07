@@ -9,7 +9,6 @@ void	*ft_malloc(size_t size) {
 	void	*block;
 
 	if (!size) {
-		show_alloc_mem();
 		return (NULL);
 	}
 	if (!(block = find_freeblock(size, getSizeZone(size)))) {
