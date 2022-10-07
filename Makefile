@@ -57,6 +57,7 @@ testo:
 	gcc srcTest/test3.c -o test3
 	gcc srcTest/test3bis.c -o test3bis
 	gcc srcTest/test4.c -o test4
+	gcc srcTest/test5.c -o test5 -L. -l:libft_malloc.so -I inc/
 	gcc srcTest/testThread.c -o testThread -lpthread
 
 $(NAME): $(OBJ) $(OBJM)

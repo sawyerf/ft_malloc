@@ -53,11 +53,11 @@ void	*calloc(size_t nmemb, size_t size);
 void	*reallocarray(void *ptr, size_t nmemb, size_t size);
 
 // ft_malloc
-void	*ft_malloc(size_t size);
-void	ft_free(void *ptr);
-void	*ft_realloc(void *ptr, size_t size);
-void	*ft_calloc(size_t nmemb, size_t size);
-void	*ft_reallocarray(void *ptr, size_t nmemb, size_t size);
+extern void	*ft_malloc(size_t size);
+extern void	ft_free(void *ptr);
+extern void	*ft_realloc(void *ptr, size_t size);
+extern void	*ft_calloc(size_t nmemb, size_t size);
+extern void	*ft_reallocarray(void *ptr, size_t nmemb, size_t size);
 
 // allocZone
 void	*alloc_zone(size_t size_block);
@@ -71,9 +71,9 @@ int		checkBlock(void *data);
 void	secuMunmap(void *ptr, size_t size);
 
 // debug
-void	show_alloc_mem(void);
+extern void	show_alloc_mem(void);
+extern void	show_alloc_mem_ex(void);
 void	ft_putvarint(char *name, long long int var);
-void	show_alloc_mem_ex(void);
 void	debug_str(char *str);
 void	debug_var(char *name, long long int var, char *end);
 void	debug_hex(char *name, void *var, char *end);
