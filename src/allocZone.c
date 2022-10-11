@@ -51,7 +51,6 @@ void	*secuMmap(size_t size) {
 void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 	t_zone	*zone;
 	size_t	real_size;
-	size_t	real_size_block;
 	size_t	page_size;
 	
 	debug_var("[*] allocZone( sizeBlock=", sizeBlock, "");
@@ -62,11 +61,12 @@ void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 	} else if (typeZone == small) {
 		sizeBlock = MAX_SIZE_SMALL;
 	}
-	real_size_block = (sizeBlock + sizeof(t_block));
+	real_size = (sizeBlock + sizeof(t_block));
 	if (typeZone != large) {
-		real_size_block *= 100;
+		real_size *= 100;
 	}
-	real_size = (real_size_block / page_size + 1) * page_size;
+	real_size += sizeof(t_zone);
+	real_size = (real_size / page_size + 1) * page_size;
 	if (!(zone = secuMmap(real_size))) return (NULL);
 	initZone(zone, typeZone, real_size - sizeof(t_zone));
 	initBlock(getFirstBlock(zone), real_size - sizeof(t_zone) - sizeof(t_block), 0);
