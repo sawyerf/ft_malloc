@@ -50,7 +50,7 @@ norm:
 	@norminette $(INC)
 
 testo:
-	gcc srcTest/myTest.c -o myTest
+	gcc srcTest/myTest.c -o myTest -L. -l:libft_malloc.so -I inc/
 	gcc srcTest/test.c -o test
 	gcc srcTest/test1.c -o test1
 	gcc srcTest/test2.c -o test2

@@ -11,6 +11,7 @@ void	*ft_malloc(size_t size) {
 	if (!size) {
 		return (NULL);
 	}
+	size = (size / 8 + 1) * 8;
 	if (!(block = find_freeblock(size, getSizeZone(size)))) {
 		return (NULL);
 	}
@@ -41,13 +42,13 @@ void	*ft_realloc(void *ptr, size_t size) {
 	if (block->size < size) {
 		prevSize = block->size;
 		removeBlock(block);
+		size = (size / 8 + 1) * 8;
 		if (!(new = find_freeblock(size, getSizeZone(size)))) {
 			return (NULL);
 		}
 		set_block(new, size);
 		new += sizeof(t_block);
 		if (new != ptr)	ft_memcpy(new, ptr, prevSize);
-		bzero(new + prevSize, size - prevSize);
 		return (new);
 	} else {
 		return (ptr);
@@ -58,7 +59,7 @@ void	*ft_calloc(size_t nmemb, size_t size) {
 	if (SIZE_MAX / size < nmemb) return (NULL);
 	size *= nmemb;
 	void *ret = ft_malloc(size);
-    ft_bzero(ret, size);
+	if (ret) ft_bzero(ret, size);
 	return ret;
 }
 
