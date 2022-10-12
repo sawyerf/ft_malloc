@@ -1,5 +1,4 @@
 #include <sys/mman.h>
-#include <sys/resource.h>
 #include "ft_malloc.h"
 #include "libft.h"
 
@@ -21,18 +20,14 @@ void	set_block(t_block *block, size_t size) {
 }
 
 void	*secuMmap(size_t size) {
-	struct rlimit rlim;
-	unsigned long long int maxPage;
-	int nbPage = size / getpagesize();
+	int nbPage = size / g_zone.pageSize;
 
 	debug_var("[*] mmap( size=", size, " )");
 	debug_var(" page=", nbPage, "");
 	debug_var(", pageAlloc=", g_zone.pageAlloc, "");
-	if (getrlimit(RLIMIT_DATA, &rlim) < 0) return (NULL);
-	maxPage = rlim.rlim_cur / getpagesize();
-	debug_var(", maxPage=", maxPage, "\n");
-	if (maxPage < g_zone.pageAlloc + nbPage) {
-		debug_var("Limit of memory, can't mmap. ( maxPage=", maxPage, "");
+	debug_var(", maxPage=", g_zone.maxPage, "\n");
+	if (g_zone.maxPage < g_zone.pageAlloc + nbPage) {
+		debug_var("Limit of memory, can't mmap. ( maxPage=", g_zone.maxPage, "");
 		debug_var(", pageAlloc=", g_zone.pageAlloc, " )");
 		return (NULL);
 	}
@@ -49,11 +44,9 @@ void	*secuMmap(size_t size) {
 void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 	t_zone	*zone;
 	size_t	real_size;
-	size_t	page_size;
 	
 	debug_var("[*] allocZone( sizeBlock=", sizeBlock, "");
 	debug_var(", typeZone=", typeZone, " )\n");
-	page_size = getpagesize();
 	if (typeZone == tiny) {
 		sizeBlock = MAX_SIZE_TINY;
 	} else if (typeZone == small) {
@@ -64,7 +57,7 @@ void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 		real_size *= 100;
 	}
 	real_size += sizeof(t_zone);
-	real_size = ((real_size - 1) / page_size) * page_size + page_size;
+	real_size = ((real_size - 1) / g_zone.pageSize) * g_zone.pageSize + g_zone.pageSize;
 	if (!(zone = secuMmap(real_size))) return (NULL);
 	initZone(zone, typeZone, real_size - sizeof(t_zone));
 	initBlock(getFirstBlock(zone), real_size - sizeof(t_zone) - sizeof(t_block), 0);
@@ -72,17 +65,16 @@ void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 }
 
 void	allocTabZones() {
-	size_t	pageSize = getpagesize();
 	t_zone	**newZones;
 
 	debug_var("[*] Alloc Tab Zone ( numPage=", g_zone.numPage + 1, " )\n");
-	if (!(newZones = secuMmap((g_zone.numPage + 1) * pageSize))) return ;
+	if (!(newZones = secuMmap((g_zone.numPage + 1) * g_zone.pageSize))) return ;
 	if (g_zone.zones) {
-		ft_memcpy(newZones, g_zone.zones, g_zone.numPage * pageSize);
-		secuMunmap(g_zone.zones, g_zone.numPage * pageSize);
+		ft_memcpy(newZones, g_zone.zones, g_zone.numPage * g_zone.pageSize);
+		secuMunmap(g_zone.zones, g_zone.numPage * g_zone.pageSize);
 	}
 	g_zone.numPage++;
-	g_zone.size = (g_zone.numPage * pageSize) / sizeof(t_zone*);
+	g_zone.size = (g_zone.numPage * g_zone.pageSize) / sizeof(t_zone*);
 	g_zone.zones = newZones;
 }
 

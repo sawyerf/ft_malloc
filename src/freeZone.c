@@ -7,7 +7,7 @@ extern t_zones g_zone;
 void	secuMunmap(void *ptr, size_t size) {
 	debug_hex("[*] munmap( ptr=", ptr, "");
 	debug_var(", size=", size, " )\n");
-	g_zone.pageAlloc -= size / getpagesize();
+	g_zone.pageAlloc -= size / g_zone.pageSize;
 	munmap(ptr, size);
 }
 

@@ -1,13 +1,20 @@
 #include "ft_malloc.h"
 #include "libft.h"
+#include <sys/resource.h>
 
-t_zones	g_zone = {0, 0, 0, 0, NULL};
+t_zones	g_zone = {0, 0, 0, 0, 0, 0, NULL};
 
 void	*ft_malloc(size_t size) {
 	void	*block;
+	struct rlimit rlim;
 
 	if (!size) {
 		return (NULL);
+	}
+	if (!g_zone.pageSize) g_zone.pageSize = getpagesize();
+	if (!g_zone.maxPage) {
+		if (getrlimit(RLIMIT_DATA, &rlim) < 0) return (NULL);
+		g_zone.maxPage = rlim.rlim_cur / g_zone.pageSize;
 	}
 	size = ((size - 1) / 8) * 8 + 8;
 	if (!(block = find_freeblock(size, getSizeZone(size)))) {

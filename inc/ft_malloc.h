@@ -38,9 +38,11 @@ typedef struct	s_zone {
 
 typedef struct	s_zones
 {
+	unsigned long long int pageAlloc;
 	unsigned int size;
 	unsigned int numPage;
-	unsigned long long int pageAlloc;
+	size_t		pageSize;
+	size_t		maxPage;
 	t_debug		 debug;	
 	t_zone		**zones;
 }				t_zones;
