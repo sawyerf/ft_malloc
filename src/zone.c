@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdint.h>
 #include "ft_malloc.h"
 #include "libft.h"
 

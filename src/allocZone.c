@@ -1,6 +1,4 @@
 #include <sys/mman.h>
-#include <stdio.h>
-#include <stdint.h>
 #include <sys/resource.h>
 #include "ft_malloc.h"
 #include "libft.h"
