@@ -66,13 +66,13 @@ void	removeBlock(t_block *block) {
 		next = getNextBlock(block);
 		if (next->free)	{
 			block->size += sizeof(t_block) + next->size;
-			bzero(next, sizeof(t_block));
+			ft_bzero(next, sizeof(t_block));
 		}
 	}
 	if ((prev = getPrevBlock(block))) {
 		if (prev->free) {
 			prev->size += sizeof(t_block) + block->size;
-			bzero(block, sizeof(t_block));
+			ft_bzero(block, sizeof(t_block));
 		}
 	}
 }

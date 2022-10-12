@@ -11,7 +11,7 @@ void	*ft_malloc(size_t size) {
 	if (!size) {
 		return (NULL);
 	}
-	size = (size / 8 + 1) * 8;
+	size = ((size - 1) / 8) * 8 + 8;
 	if (!(block = find_freeblock(size, getSizeZone(size)))) {
 		return (NULL);
 	}
@@ -39,10 +39,10 @@ void	*ft_realloc(void *ptr, size_t size) {
 	
 	if (!checkBlock(ptr)) return (NULL);
 	block = ptr - sizeof(t_block);
+	size = ((size - 1) / 8) * 8 + 8;
 	if (block->size < size) {
 		prevSize = block->size;
 		removeBlock(block);
-		size = (size / 8 + 1) * 8;
 		if (!(new = find_freeblock(size, getSizeZone(size)))) {
 			return (NULL);
 		}

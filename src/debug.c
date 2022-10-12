@@ -10,7 +10,7 @@ void ft_puthex(unsigned long long int hex, int min) {
 	char	strHex[] = "0123456789ABCDEF";
 	int		index = 23;
 
-	memset(str, '0', 23);
+	ft_memset(str, '0', 23);
 	while (hex) {
 		index--;
 		str[index] = strHex[hex % 16];
