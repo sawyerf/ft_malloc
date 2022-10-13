@@ -15,6 +15,13 @@
 
 # define ALIGN 16
 
+typedef enum e_debug
+{
+	notset = 0,
+	activate,
+	desactivate,
+}			t_debug;
+
 typedef enum e_type_zone
 {
 	unused = 0,
@@ -36,11 +43,12 @@ typedef struct	s_zone {
 
 typedef struct	s_zones
 {
-	size_t pageAlloc;
-	size_t size;
-	size_t numPage;
+	size_t		pageAlloc;
+	size_t		size;
+	size_t		numPage;
 	size_t		pageSize;
 	size_t		maxPage;
+	t_debug		debug;
 	t_zone		**zones;
 }				t_zones;
 

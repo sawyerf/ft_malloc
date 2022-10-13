@@ -1,7 +1,7 @@
 #include "ft_malloc.h"
 #include "libft.h"
 
-t_zones	g_zone = {0, 0, 0, 0, 0, 0};
+t_zones	g_zone = {0, 0, 0, 0, 0, 0, 0};
 
 void	*ft_malloc(size_t size) {
 	void	*block;
