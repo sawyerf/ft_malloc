@@ -13,6 +13,8 @@
 # define MAX_SIZE_TINY 256
 # define MAX_SIZE_SMALL 1024
 
+# define ALIGN 16
+
 typedef enum e_type_zone
 {
 	unused = 0,

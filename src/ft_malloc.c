@@ -15,7 +15,7 @@ void	*ft_malloc(size_t size) {
 		if (getrlimit(RLIMIT_DATA, &rlim) < 0) return (NULL);
 		g_zone.maxPage = rlim.rlim_cur / g_zone.pageSize;
 	}
-	size = ((size - 1) / 8) * 8 + 8;
+	size = ((size - 1) / ALIGN) * ALIGN + ALIGN;
 	if (!(block = find_freeblock(size, getSizeZone(size)))) {
 		return (NULL);
 	}
@@ -43,7 +43,7 @@ void	*ft_realloc(void *ptr, size_t size) {
 	
 	if (!checkBlock(ptr)) return (NULL);
 	block = ptr - sizeof(t_block);
-	size = ((size - 1) / 8) * 8 + 8;
+	size = ((size - 1) / ALIGN) * ALIGN + ALIGN;
 	if (block->size < size) {
 		prevSize = block->size;
 		removeBlock(block);
