@@ -10,10 +10,10 @@
 
 # define MALLOC_DEBUG 0
 
-# define MAX_SIZE_TINY 1024
-# define MAX_SIZE_SMALL 32 * MAX_SIZE_TINY
+# define MAX_SIZE_TINY 512
+# define MAX_SIZE_SMALL 4096
 
-# define ALIGN 16
+# define ALIGN (2 * sizeof(size_t))
 
 typedef enum e_debug
 {
