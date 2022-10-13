@@ -1,8 +1,5 @@
-#include <sys/mman.h>
 #include "ft_malloc.h"
 #include "libft.h"
-
-extern t_zones g_zone;
 
 void	secuMunmap(void *ptr, size_t size) {
 	debug_hex("[*] munmap( ptr=", ptr, "");

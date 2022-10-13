@@ -1,8 +1,6 @@
 #include "ft_malloc.h"
 #include "libft.h"
 
-extern t_zones g_zone;
-
 void    initZone(t_zone *zone, t_type_zone typeZone, size_t size) {
     zone->type = typeZone;
 	zone->size = size;

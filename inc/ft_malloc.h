@@ -2,13 +2,14 @@
 # define FT_MALLOC_H
 
 # include <unistd.h>
+# include <stdlib.h>
+# include <sys/mman.h>
+# include <sys/resource.h>
+# include <stdint.h>
+# include <pthread.h>
 
 # define MAX_SIZE_TINY 256
 # define MAX_SIZE_SMALL 1024
-
-# define TYPE_TINY 1
-# define TYPE_SMALL 2
-# define TYPE_LARGE 3
 
 typedef enum e_type_zone
 {
@@ -47,35 +48,38 @@ typedef struct	s_zones
 	t_zone		**zones;
 }				t_zones;
 
+extern t_zones g_zone;
+
 // malloc
-void	*malloc(size_t size);
-void	free(void *ptr);
-void	*realloc(void *ptr, size_t size);
-void	*calloc(size_t nmemb, size_t size);
-void	*reallocarray(void *ptr, size_t nmemb, size_t size);
+extern void	*malloc(size_t size);
+extern void	free(void *ptr);
+extern void	*realloc(void *ptr, size_t size);
+extern void	*calloc(size_t nmemb, size_t size);
+extern void	*reallocarray(void *ptr, size_t nmemb, size_t size);
 
 // ft_malloc
-extern void	*ft_malloc(size_t size);
-extern void	ft_free(void *ptr);
-extern void	*ft_realloc(void *ptr, size_t size);
-extern void	*ft_calloc(size_t nmemb, size_t size);
-extern void	*ft_reallocarray(void *ptr, size_t nmemb, size_t size);
+void	*ft_malloc(size_t size);
+void	ft_free(void *ptr);
+void	*ft_realloc(void *ptr, size_t size);
+void	*ft_calloc(size_t nmemb, size_t size);
+void	*ft_reallocarray(void *ptr, size_t nmemb, size_t size);
 
 // allocZone
-void	*alloc_zone(size_t size_block);
 void	set_block(t_block *block, size_t size);
 t_block	*find_freeblock(size_t size, t_type_zone typeZone);
 
 // freeZone
-void	removeBlock(t_block *zone);
-void	freeZone();
-int		checkBlock(void *data);
 void	secuMunmap(void *ptr, size_t size);
+int		checkBlock(void *data);
+void	freeZone();
+void	removeBlock(t_block *zone);
 
-// debug
+// show_alloc_mem
 extern void	show_alloc_mem(void);
 extern void	show_alloc_mem_ex(void);
-void	ft_putvarint(char *name, long long int var);
+
+// debug
+void	puthex(unsigned long long int hex, int min);
 void	debug_str(char *str);
 void	debug_var(char *name, long long int var, char *end);
 void	debug_hex(char *name, void *var, char *end);

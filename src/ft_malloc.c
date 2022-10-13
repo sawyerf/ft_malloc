@@ -1,6 +1,5 @@
 #include "ft_malloc.h"
 #include "libft.h"
-#include <sys/resource.h>
 
 t_zones	g_zone = {0, 0, 0, 0, 0, 0, NULL};
 

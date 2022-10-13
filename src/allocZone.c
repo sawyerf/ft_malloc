@@ -1,8 +1,5 @@
-#include <sys/mman.h>
 #include "ft_malloc.h"
 #include "libft.h"
-
-extern t_zones g_zone;
 
 // set variable of new allcate block
 void	set_block(t_block *block, size_t size) {
@@ -19,7 +16,7 @@ void	set_block(t_block *block, size_t size) {
 	}
 }
 
-void	*secuMmap(size_t size) {
+static void	*secuMmap(size_t size) {
 	int nbPage = size / g_zone.pageSize;
 
 	debug_var("[*] mmap( size=", size, " )");
@@ -41,7 +38,7 @@ void	*secuMmap(size_t size) {
 	);
 }
 
-void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
+static void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 	t_zone	*zone;
 	size_t	real_size;
 	
@@ -64,7 +61,7 @@ void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 	return (zone);
 }
 
-void	allocTabZones() {
+static void	allocTabZones() {
 	t_zone	**newZones;
 
 	debug_var("[*] Alloc Tab Zone ( numPage=", g_zone.numPage + 1, " )\n");
@@ -78,7 +75,7 @@ void	allocTabZones() {
 	g_zone.zones = newZones;
 }
 
-int addZoneToTab(t_zone *zone) {
+static int addZoneToTab(t_zone *zone) {
 	t_block *block;
 
 	for (unsigned int index = 0; index < g_zone.size; index++) {
@@ -92,7 +89,7 @@ int addZoneToTab(t_zone *zone) {
 	return 0;
 }
 
-void	addZone(size_t size, t_type_zone typeZone) {
+static void	addZone(size_t size, t_type_zone typeZone) {
 	t_zone	*new;
 
 	if (!(new = allocZone(size, typeZone))) return ;
@@ -102,7 +99,7 @@ void	addZone(size_t size, t_type_zone typeZone) {
 	}
 }
 
-t_block	*findFreeBlock(t_block *block, size_t size, size_t sizeZone) {
+static t_block	*findFreeBlock(t_block *block, size_t size, size_t sizeZone) {
 	if (sizeZone <= 0) {
 		return (NULL);
 	}
@@ -115,7 +112,7 @@ t_block	*findFreeBlock(t_block *block, size_t size, size_t sizeZone) {
 		sizeZone - sizeof(t_block) - block->size);
 }
 
-void	*findBlock(size_t size, t_type_zone typeZone) {
+static void	*findBlock(size_t size, t_type_zone typeZone) {
 	t_block	*block;
 
 	for (unsigned int index = 0; index < g_zone.size; index++) {

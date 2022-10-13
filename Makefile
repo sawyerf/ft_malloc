@@ -18,22 +18,18 @@ SRC_FILE =	malloc.c \
 			freeZone.c \
 			zone.c \
 			debug.c \
-
-SRC_MAIN =	main.c			
+			show_alloc_mem.c \
 
 CFLAGS =	-I $(INC_DIR) -I libft/inc/ -Wall -lm -Werror -Wextra -g
 
 OBJ_DIR =	.obj
 OBJ_FILE =	$(SRC_FILE:.c=.o)
-OBJ_MAIN =	$(SRC_MAIN:.c=.o)
 
 CRT_DIR =	./
 
 SRC = 		$(addprefix $(SRC_DIR)/,$(SRC_FILE))
-SRCM = 		$(addprefix $(SRC_DIR)/,$(SRC_MAIN))
 INC = 		$(addprefix $(INC_DIR)/,$(INC_FILE))
 OBJ = 		$(addprefix $(OBJ_DIR)/,$(OBJ_FILE))
-OBJM = 		$(addprefix $(OBJ_DIR)/,$(OBJ_MAIN))
 CRT = 		$(addprefix $(OBJ_DIR)/,$(CRT_DIR))
 
 all: $(NAME)
@@ -61,18 +57,17 @@ testo:
 	@gcc srcTest/testThread.c -o testThread -lpthread
 	@printf "\033[0;32m[$(NAME)] Compilation [OK]\033[0;0m\n"
 
-$(NAME): $(OBJ) $(OBJM)
+$(NAME): $(OBJ)
 	@printf "\033[0;32m[$(NAME)] Compilation [OK]\033[0;0m\n"
 	@make -C libft/
 	@$(CC) $(CFLAGS) -shared -o $@ $(OBJ) libft/libft.a
 	@ln -s $@ libft_malloc.so 2>&- || true
-	@# @$(CC) $(CFLAGS) $(OBJ) $(OBJM) libft/libft.a -o mallocMain
 
 clean:
 	@make clean -C libft/
 	@/bin/rm -f $(OBJ)
 	@/bin/rm -rf $(OBJ_DIR)
-	@/bin/rm -f test test1 test2 test3 test3bis test4 test5 mallocMain testThread myTest
+	@/bin/rm -f test test1 test2 test3 test3bis test4 test5 testThread myTest
 	@/bin/rm -f libft_malloc.so $(NAME)
 	@printf "\033[0;31m[$(NAME)] Deleted *.o\033[0;0m\n"
 
