@@ -55,7 +55,10 @@ static void	*allocZone(size_t sizeBlock, t_type_zone typeZone) {
 	}
 	real_size += sizeof(t_zone);
 	real_size = ((real_size - 1) / g_zone.pageSize) * g_zone.pageSize + g_zone.pageSize;
-	if (!(zone = secuMmap(real_size))) return (NULL);
+	if ((zone = secuMmap(real_size)) == (void*)-1) {
+		debug_str("[!] Mmap fail\n");
+		return (NULL);
+	}
 	initZone(zone, typeZone, real_size - sizeof(t_zone));
 	initBlock(getFirstBlock(zone), real_size - sizeof(t_zone) - sizeof(t_block), 0);
 	return (zone);
@@ -65,7 +68,7 @@ static void	allocTabZones() {
 	t_zone	**newZones;
 
 	debug_var("[*] Alloc Tab Zone ( numPage=", g_zone.numPage + 1, " )\n");
-	if (!(newZones = secuMmap((g_zone.numPage + 1) * g_zone.pageSize))) return ;
+	if ((newZones = secuMmap((g_zone.numPage + 1) * g_zone.pageSize)) == (void*)-1) return ;
 	if (g_zone.zones) {
 		ft_memcpy(newZones, g_zone.zones, g_zone.numPage * g_zone.pageSize);
 		secuMunmap(g_zone.zones, g_zone.numPage * g_zone.pageSize);
