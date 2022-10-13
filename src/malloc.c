@@ -1,6 +1,5 @@
 #include "ft_malloc.h"
 #include "libft.h"
-#include <pthread.h>
 
 pthread_mutex_t __mutex_shared_variable = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 
