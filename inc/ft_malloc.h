@@ -8,6 +8,8 @@
 # include <stdint.h>
 # include <pthread.h>
 
+# define MALLOC_DEBUG 0
+
 # define MAX_SIZE_TINY 256
 # define MAX_SIZE_SMALL 1024
 
@@ -18,13 +20,6 @@ typedef enum e_type_zone
 	small,
 	large
 }			t_type_zone;
-
-typedef enum e_debug
-{
-	notset = 0,
-	activate,
-	desactivate,
-}			t_debug;
 
 typedef struct		s_block {
 	size_t			size;
@@ -39,12 +34,11 @@ typedef struct	s_zone {
 
 typedef struct	s_zones
 {
-	unsigned long long int pageAlloc;
-	unsigned int size;
-	unsigned int numPage;
+	size_t pageAlloc;
+	size_t size;
+	size_t numPage;
 	size_t		pageSize;
 	size_t		maxPage;
-	t_debug		 debug;	
 	t_zone		**zones;
 }				t_zones;
 

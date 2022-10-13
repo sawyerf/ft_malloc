@@ -19,31 +19,14 @@ void puthex(unsigned long long int hex, int min) {
 	}
 }
 
-static void initDebug() {
-	char *env;
-
-	if (!g_zone.debug) {
-		env = getenv("DEBUG_MALLOC");
-		if (!ft_strcmp(env, "0")) {
-			g_zone.debug = desactivate;
-		} else if (!ft_strcmp(env, "1")) {
-			g_zone.debug = activate;
-		}
-	}
-}
-
 void debug_str(char *str) {
-	initDebug();
-
-	if (g_zone.debug == activate) {
+	if (MALLOC_DEBUG) {
 		ft_putstr(str);
 	}
 }
 
 void	debug_var(char *name, long long int var, char *end) {
-	initDebug();
-
-	if (g_zone.debug == activate) {
+	if (MALLOC_DEBUG) {
 		ft_putstr(name);
 		ft_putnbr(var);
 		ft_putstr(end);
@@ -51,9 +34,7 @@ void	debug_var(char *name, long long int var, char *end) {
 }
 
 void	debug_hex(char *name, void *var, char *end) {
-	initDebug();
-
-	if (g_zone.debug == activate) {
+	if (MALLOC_DEBUG) {
 		ft_putstr(name);
 		ft_putstr("0x");
 		puthex((uintptr_t)var, 8);
