@@ -1,16 +1,16 @@
 # 💾 ft_malloc
 
-Reproduction de la celebre fonction malloc
+Ce projet consiste a reproduire la legendaire fonction malloc introduit dans la libc en 1987.
 
-```c
-// ft_printf("next: %p\n", block->next);
-// ft_printf("prev: %p\n", block->prev);
-// ft_printf("prev: %p\n", (block->next)->prev);
-// ft_printf("size: %d\n", block->size);
-// ft_printf("next: %p\n", );
-```
+## Schema of my malloc
+### Zone 
+![Diagram Simple Zone](https://user-images.githubusercontent.com/22857002/196168807-4730a20d-3540-4441-b7e8-a74052709f6f.png)
 
-## Schema Zone
+
+### Structure of metadata
+![Diagram Zone](https://user-images.githubusercontent.com/22857002/196167568-8d8cd595-1440-4aae-8795-19031e550ecc.png)
+
+<!--
 ```
 +-------------------------------+---------+
 | Metadata                      | Data    |
@@ -23,10 +23,27 @@ Reproduction de la celebre fonction malloc
 | Metadata     | Data    | Metadata     | Data    |
 +--------------+---------+--------------+---------+
 ```
+-->
+
+## Include
+```C
+# Basic
+extern void	*malloc(size_t size);
+extern void	*realloc(void *ptr, size_t size);
+extern void	free(void *ptr);
+
+# Bonus
+extern void	*calloc(size_t nmemb, size_t size);
+extern void	*reallocarray(void *ptr, size_t nmemb, size_t size);
+
+# Debug
+extern void	show_alloc_mem(void);
+extern void	show_alloc_mem_ex(void);
+```
 
 ## Malloc Rule
-```
-  The main properties of the algorithms are:
+<pre>
+<strong>The main properties of the algorithms are</strong>:
   * For large (>= 512 bytes) requests, it is a pure best-fit allocator,
     with ties normally decided via FIFO (i.e. least recently used).
   * For small (<= 64 bytes by default) requests, it is a caching
@@ -36,14 +53,14 @@ Reproduction de la celebre fonction malloc
   * For very large requests (>= 128KB by default), it relies on system
     memory mapping facilities, if supported.
 
-  Alignment:                              2 * sizeof(size_t) (default)
+  <strong>Alignment</strong>:                              2 * sizeof(size_t) (default)
        (i.e., 8 byte alignment with 4byte size_t). This suffices for
        nearly all current machines and C compilers. However, you can
        define MALLOC_ALIGNMENT to be wider than this if necessary.
-  Minimum overhead per allocated chunk:   4 or 8 bytes
+  <strong>Minimum overhead per allocated chunk</strong>:   4 or 8 bytes
        Each malloced chunk has a hidden word of overhead holding size
        and status information.
-  Minimum allocated size: 4-byte ptrs:  16 bytes    (including 4 overhead)
+  <strong>Minimum allocated size</strong>: 4-byte ptrs:  16 bytes    (including 4 overhead)
 			  8-byte ptrs:  24/32 bytes (including, 4/8 overhead)
        When a chunk is freed, 12 (for 4byte ptrs) or 20 (for 8 byte
        ptrs but 4 byte size) or 24 (for 8/8) additional bytes are
@@ -58,9 +75,9 @@ Reproduction de la celebre fonction malloc
        are serviced via mmap(), where the worst case wastage is 2 *
        sizeof(size_t) bytes plus the remainder from a system page (the
        minimal mmap unit); typically 4096 or 8192 bytes.
-  Maximum allocated size:  4-byte size_t: 2^32 minus about two pages
+  <strong>Maximum allocated size</strong>:  4-byte size_t: 2^32 minus about two pages
 			   8-byte size_t: 2^64 minus about two pages
-```
+</pre>
 
 ## Commands
 ```
@@ -72,3 +89,4 @@ Reproduction de la celebre fonction malloc
 - [Malloc Tutorial](https://wiki-prog.infoprepa.epita.fr/images/0/04/Malloc_tutorial.pdf)
 - [Source malloc](https://code.woboq.org/userspace/glibc/malloc/malloc.c.html)
 - [Thread example](https://gist.github.com/gustavorv86/51582381d4aaa5efe837a0a4a9daf663)
+- [GNU Documentation](https://www.gnu.org/software/libc/manual/html_node/Unconstrained-Allocation.html)
